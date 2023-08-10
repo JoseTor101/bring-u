@@ -28,15 +28,15 @@
           <div class="card">
               <div class="card-header" id="heading{{ restaurant.id }}">
                 <h5 class="mb-0">
-                  <button class="btn btn-link" onclick="window.location.href='/restaurant/{{ restaurant.id }}/'" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  <button class="btn btn-link" onclick="window.location.href='/restaurant/{{ restaurant.id }}/'" data-toggle="collapse" data-target="#collapse{{restaurant.id}}" aria-expanded="true" aria-controls="collapse{{rstaurant.id }}">
                   {{restaurant.name}}
                   </button>
                 </h5>
               </div>
             
-             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+             <div id="collapse{{restaurant.id}}" class="collapse show" aria-labelledby="heading{{restaurant.id}}" data-parent="#accordion">
                   <div class="card-body">
-                    Detalle menu
+                    {{restaurant.description}}
                   </div>
                 </div>
             </div>

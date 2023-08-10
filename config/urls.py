@@ -21,6 +21,7 @@ from bring_u import views as bringuViews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', bringuViews.home),
     path('restaurants',bringuViews.restaurants),
     path('restaurant/<int:restaurant_id>/', bringuViews.restaurant_detail, name='restaurant_detail'),
 ]

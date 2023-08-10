@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from .models import Restaurants,Menu
 # Create your views here.
 
+def home(request):
+    return render(request, 'home.html')
 
 def restaurants(request):
     searchRestaurant= request.GET.get('searchRestaurant')
