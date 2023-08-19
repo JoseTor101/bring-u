@@ -13,8 +13,9 @@ def restaurants(request):
         restaurants = Restaurants.objects.filter(name__icontains = searchRestaurant)
     else:
         restaurants=  Restaurants.objects.all()
-    restaurantDict = {'restaurants': restaurants} 
-    return render(request, 'restaurants.html', restaurantDict )
+        searchRestaurant = "" 
+    restaurantDict = {'restaurants': restaurants,'searchRestaurant':searchRestaurant} 
+    return render(request, 'restaurants.html', restaurantDict  )
 
 def restaurant_detail(request, restaurant_id):
     restaurant = get_object_or_404(Restaurants, pk=restaurant_id)
