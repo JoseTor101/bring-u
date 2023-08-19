@@ -16,11 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 from bring_u import views as bringuViews 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', bringuViews.home),
     path('restaurants',bringuViews.restaurants),
     path('restaurant/<int:restaurant_id>/', bringuViews.restaurant_detail, name='restaurant_detail'),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

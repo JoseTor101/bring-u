@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from .models import Restaurants,Menu
 # Create your views here.
 
+def home(request):
+    return render(request, 'home.html')
 
 def restaurants(request):
     searchRestaurant= request.GET.get('searchRestaurant')
@@ -11,8 +13,9 @@ def restaurants(request):
         restaurants = Restaurants.objects.filter(name__icontains = searchRestaurant)
     else:
         restaurants=  Restaurants.objects.all()
-    restaurantDict = {'restaurants': restaurants} 
-    return render(request, 'restaurants.html', restaurantDict )
+        searchRestaurant = "" 
+    restaurantDict = {'restaurants': restaurants,'searchRestaurant':searchRestaurant} 
+    return render(request, 'restaurants.html', restaurantDict  )
 
 def restaurant_detail(request, restaurant_id):
     restaurant = get_object_or_404(Restaurants, pk=restaurant_id)
