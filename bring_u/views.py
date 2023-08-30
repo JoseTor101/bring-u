@@ -1,7 +1,7 @@
 from django.shortcuts import render,  get_object_or_404
 from django.http import HttpResponse
 
-from .models import Business,Product
+from .models import Business,Product, User, Request
 # Create your views here.
 
 def home(request):
@@ -21,3 +21,9 @@ def product(request, id_business):
     business = get_object_or_404(Business, pk=id_business)
     products = business.product_set.all()  # Obtener todos los productos asociados al restaurante
     return render(request, 'business_detail.html', {'business': business, 'products': products})
+
+def profile(request):
+    return render(request, 'profile.html')
+
+def orders(request):
+    return render(request, 'request.html')
