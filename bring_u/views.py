@@ -6,28 +6,18 @@ from .models import Business,Product
 
 def home(request):
     return render(request, 'home.html')
-    
+
 def business(request):
-    return render("<h1>Hola</h1>")
-
-def product(request):
-    return render("<h1>Hola</h1>")
-
-"""def home(request):
-    return render(request, 'home.html')
-
-def restaurants(request):
-    searchRestaurant= request.GET.get('searchRestaurant')
-    if searchRestaurant:
-        restaurants = Restaurants.objects.filter(name__icontains = searchRestaurant)
+    searchBusiness= request.GET.get('searchBusiness')
+    if searchBusiness:
+        businesses = Business.objects.filter(name__icontains = searchBusiness)
     else:
-        restaurants=  Restaurants.objects.all()
-        searchRestaurant = "" 
-    restaurantDict = {'restaurants': restaurants,'searchRestaurant':searchRestaurant} 
-    return render(request, 'restaurants.html', restaurantDict  )
+        businesses =  Business.objects.all()
+        searchBusiness = "" 
+    businessesDict = {'businesses': businesses,'searchRestaurant':searchBusiness} 
+    return render(request, 'business.html', businessesDict  )
 
-def restaurant_detail(request, restaurant_id):
-    restaurant = get_object_or_404(Restaurants, pk=restaurant_id)
-    menu_items = restaurant.menu_set.all()  # Obtener todos los platos asociados al restaurante
-    return render(request, 'restaurant_detail.html', {'restaurant': restaurant, 'menu_items': menu_items})
-"""
+def product(request, id_business):
+    business = get_object_or_404(Business, pk=id_business)
+    products = business.product_set.all()  # Obtener todos los productos asociados al restaurante
+    return render(request, 'business_detail.html', {'business': business, 'products': products})
