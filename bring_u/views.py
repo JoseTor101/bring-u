@@ -1,23 +1,23 @@
 from django.shortcuts import render,  get_object_or_404
 from django.http import HttpResponse
 
-from .models import Restaurants,Menu
+from .models import Business,Product
 # Create your views here.
 
 def home(request):
     return render(request, 'home.html')
 
-def restaurants(request):
-    searchRestaurant= request.GET.get('searchRestaurant')
-    if searchRestaurant:
-        restaurants = Restaurants.objects.filter(name__icontains = searchRestaurant)
+def business(request):
+    searchBusiness= request.GET.get('searchBusiness')
+    if searchBusiness:
+        businesses = Business.objects.filter(name__icontains = searchBusiness)
     else:
-        restaurants=  Restaurants.objects.all()
-        searchRestaurant = "" 
-    restaurantDict = {'restaurants': restaurants,'searchRestaurant':searchRestaurant} 
-    return render(request, 'restaurants.html', restaurantDict  )
+        businesses =  Business.objects.all()
+        searchBusiness = "" 
+    businessesDict = {'businesses': businesses,'searchRestaurant':searchBusiness} 
+    return render(request, 'business.html', businessesDict  )
 
-def restaurant_detail(request, restaurant_id):
-    restaurant = get_object_or_404(Restaurants, pk=restaurant_id)
-    menu_items = restaurant.menu_set.all()  # Obtener todos los platos asociados al restaurante
-    return render(request, 'restaurant_detail.html', {'restaurant': restaurant, 'menu_items': menu_items})
+def product(request, id_business):
+    business = get_object_or_404(Business, pk=id_business)
+    products = business.product_set.all()  # Obtener todos los productos asociados al restaurante
+    return render(request, 'business_detail.html', {'business': business, 'products': products})
