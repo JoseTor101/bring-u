@@ -26,6 +26,8 @@ urlpatterns = [
     path('', bringuViews.home),
     path('business',bringuViews.business),
     path('business/<int:id_business>/', bringuViews.product, name='business_detail'),
+    path('profile', bringuViews.profile),
+    path('request', bringuViews.orders),
 ]
 
 
