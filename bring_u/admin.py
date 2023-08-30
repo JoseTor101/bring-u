@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Restaurants
-from .models import Menu
+from .models import Business
+from .models import Product
 
 # Register your models here.
-admin.site.register(Restaurants)
-admin.site.register(Menu)
+admin.site.register(Business)
+admin.site.register(Product)
