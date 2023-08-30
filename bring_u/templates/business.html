@@ -49,7 +49,7 @@
                         Services
                       </a>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="/restaurants">Food</a>
+                        <a class="dropdown-item" href="/business">Food</a>
                         <a class="dropdown-item" href="#">Carpooling</a>
                         
                       </div>
@@ -62,30 +62,30 @@
         </div>
     </nav>
     </header>
-    <h2 id="restaurant-list">Lista de restaurantes disponibles</h2>
+    <h2 id="restaurant-list">Lista de negocios disponibles</h2>
     <div class="container mt-5">
       <div class="row justify-content-center">
           <div class="col-md-6">
               <form class="d-flex" action="">
-                  <input class="form-control me-2"name="searchRestaurant" type="text"  placeholder="Buscar un restaurante:" aria-label="Search">
+                  <input class="form-control me-2" name="searchBusiness" type="text"  placeholder="Buscar un negocio:" aria-label="Search">
                   <button class="btn btn-primary" type="submit">Buscar</button>
                 </form>
               </div>
             </div>
       </div>
       <div id="searchReference">
-        <p>Searching for {{ searchRestaurant }}</p>
+        <p>Searching for {{ searchBusiness }}</p>
       </div>
-        {% for restaurant in restaurants %}
-        <div class="container mt-5" id="clickable-container" onclick="redirectToLink('{{restaurant.id}}')">
+        {% for business in businesses %}
+        <div class="container mt-5" id="clickable-container" onclick="redirectToLink('{{business.id_business}}')">
           <div class="row">
               <div class="col-md-2">
                   <img src="../../media/food.png" alt="Image" class="img-fluid">
               </div>
               <div class="col-md-8">
                   <ul class="list-group">
-                      <li class="list-group-item font-weight-bold">{{restaurant.name}}</li>
-                      <li class="list-group-item">{{restaurant.description}}</li>
+                      <li class="list-group-item font-weight-bold">{{business.name}}</li>
+                      <li class="list-group-item">{{business.desc}}</li>
                       <li class="list-group-item">Rating ★</li>
                   </ul>
               </div>
@@ -95,11 +95,11 @@
     </div>
     <script>
       function redirectToLink(url) {
-          window.location.href = '/restaurant/'+url;
+          window.location.href = '/business/'+url;
       }
     </script>
     
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
