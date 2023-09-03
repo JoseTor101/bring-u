@@ -18,7 +18,7 @@ class User(models.Model):
     id_user = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     username = models.CharField(max_length=15)
-    password = models.CharField(max_length=50)
+    password = models.CharField(max_length=50, default="123")
     is_service_prov = models.BooleanField()
     email = models.CharField(max_length=60)
     tel = models.IntegerField()
