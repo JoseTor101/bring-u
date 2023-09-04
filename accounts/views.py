@@ -7,19 +7,25 @@ from .forms import SignUpForm
 from .models import User  # Import your custom user model
 
 def signup(request):
+    data = {
+        'form': SignUpForm()
+    }
     if request.method == 'GET':
-        return render(request, 'signupaccount.html', {'form': SignUpForm()})
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid() :
-                return redirect('/')
-        else:
-                return render(request, 'signupaccount.html', {'form': form, 'error': 'Username or email already taken.'})
+        return render(request, 'signup.html', data)
     else:
-        form = SignUpForm()
-        
-    return render(request, 'signupaccount.html', {'form': form})
+        if request.method == 'POST':
+            user_creation_form = SignUpForm(request.POST)
+            print(user_creation_form)
+            
+            if request.POST['password1'] == request.POST['password2']:
+                print('YESSSSS')
+                user_creation_form.save()
 
+                #Logear al usuario inmediatamente después del registro
+                user = authenticate(username = user_creation_form.cleaned_data['username'], password = user_creation_form.cleaned_data['password1'])
+                login(request, user)
+                return redirect('/')
+            return render(request, 'signup.html', data)
 
 """def signupaccount(request):
     if request.method == 'GET':

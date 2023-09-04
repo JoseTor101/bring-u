@@ -1,4 +1,5 @@
 from django.shortcuts import render,  get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 from .models import Business,Product, User, Request
@@ -22,8 +23,13 @@ def product(request, id_business):
     products = business.product_set.all()  # Obtener todos los productos asociados al restaurante
     return render(request, 'business_detail.html', {'business': business, 'products': products})
 
+@login_required
 def profile(request):
-    return render(request, 'profile.html')
+    user = request.user
+    context = {
+        'user': user
+    }
+    return render(request, 'profile.html', context)
 
 def orders(request):
     return render(request, 'request.html')
