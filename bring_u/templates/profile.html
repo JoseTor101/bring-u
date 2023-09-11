@@ -9,7 +9,27 @@
         <p><strong>Tel:</strong> {{ user.tel }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <h2>Órdenes en curso</h2>
-        <p>Orden, estado (sin tomar, en proceso, completado), cancelar orden</p>
+        <div class="container">
+          <div class="row">
+              {% for order in orders %}
+              <div class="col-md-4 mb-4">
+                  <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title">{{ order.name }}</h5>
+                          <p class="card-text">{{ order.desc }}</p>
+                          <p class="card-text">Price: ${{ order.price }}</p>
+                          <p class="card-text" style="color:red">{{ order.status }}</p>
+                      </div>
+                      <div class="card-footer">
+                          <button class="btn btn-danger btn-cancel">Cancel</button>
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+      
+      
         <h2>Historial de ordenes</h2>
     </div>
 {% endblock %}

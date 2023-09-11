@@ -36,14 +36,21 @@ def product(request, id_business):
 @login_required
 def profile(request):
     user = request.user
+    user_requests = Request.objects.filter(fk_id_user=2)
+    print("😀",user_requests)
+
+    for equest in user_requests:
+        print("Product Name:", equest.name)
+        print("Description:", equest.desc)
+        print("Price:",equest.price)
+
     context = {
-        'user': user
+        'user': user,
+        'orders': user_requests
     }
 
     if request.method == "POST":
         form_data = request.POST
-        print ("😎",user)
-        print ("😎",request.user.id_user)
         user_id = UserProfile.objects.get(id_user=user.id_user)
         business = Business.objects.get(name=form_data['business_name'])
         business_id = business.id_business
