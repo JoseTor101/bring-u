@@ -1,7 +1,6 @@
-from django.shortcuts import render,  get_object_or_404
+from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-
 from .models import Business,Product, Request
 from accounts.models import UserProfile
 import json
@@ -44,8 +43,8 @@ def profile(request):
     if request.method == "POST":
         form_data = request.POST
         print ("😎",user)
-        user_id = User.objects.get(username=user.username)
-        
+        print ("😎",request.user.id_user)
+        user_id = UserProfile.objects.get(id_user=user.id_user)
         business = Business.objects.get(name=form_data['business_name'])
         business_id = business.id_business
 
