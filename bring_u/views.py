@@ -34,30 +34,44 @@ def product(request, id_business):
     return render(request, 'business_detail.html', {'business': business, 'products': products})
 
 @login_required
-def profile(request):
+def profile(request, id_del=None):
+    #revisar esto
     user = request.user
+    
+    #MOSTRAR ORDENES EN CURSO
+    #Buscar como obtener id de usuario de la manear apropiada
     user_requests = Request.objects.filter(fk_id_user=2)
-    print("😀",user_requests)
-
-    for equest in user_requests:
-        print("Product Name:", equest.name)
-        print("Description:", equest.desc)
-        print("Price:",equest.price)
+    #print("😀",user_requests)
 
     context = {
         'user': user,
-        'orders': user_requests
+        'orders': user_requests,
     }
+    if request.method == 'POST' and request.POST.get('_method') == 'DELETE':
+        product_id = request.POST.get('product_id')
+        try:
+            delete_order = Request.objects.get(fk_id_product=product_id)
+            delete_order.delete()
+        except Request.DoesNotExist:
+            # Handle the case where the order with the specified product ID does not exist
+            pass
+        return redirect('/profile')
+
+
+    #CREACION DE ORDEN
 
     if request.method == "POST":
         form_data = request.POST
-        user_id = UserProfile.objects.get(id_user=user.id_user)
+        #print("🐾", form_data)
+        user_id = UserProfile.objects.get(id_user=2)
+        product = Product.objects.get(id_product=form_data['product_id'])
         business = Business.objects.get(name=form_data['business_name'])
-        business_id = business.id_business
-
+        #print("🐾", form_data)
+        
         Request.objects.create(
                 fk_id_user=user_id,
                 fk_id_business=business,
+                fk_id_product=product,
                 name=form_data['product_name'],
                 desc=form_data['product_desc'],
                 price=form_data['product_price'],
@@ -66,10 +80,9 @@ def profile(request):
                 desc_delivery=form_data['desc_delivery'],
             )
 
-        return redirect('/')
+        return redirect('/profile')
 
-        """for field_name, field_value in form_data.items():
-            print(f"Field Name: {field_name}, Field Value: {field_value}")"""
+    
 
 
     return render(request, 'profile.html', context)

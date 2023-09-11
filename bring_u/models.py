@@ -7,6 +7,9 @@ class Business(models.Model):
     opening_time = models.TimeField(default="07:00:00")
     closing_time = models.TimeField(default="18:00:00")
 
+    def __str__(self):
+        return self.name
+
 class Product(models.Model):
     id_product = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
@@ -26,4 +29,5 @@ class Request(models.Model):
     desc_pick_up_location = models.CharField(max_length=1000, null=True)
     fk_id_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     fk_id_business = models.ForeignKey(Business, on_delete=models.SET_NULL, null=True)
+    fk_id_product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
 
