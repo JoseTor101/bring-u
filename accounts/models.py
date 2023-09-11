@@ -1,12 +1,11 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-
-class User(models.Model):
+from django.contrib.auth.models import AbstractUser
+class UserProfile(AbstractUser):
     id_user = models.AutoField(primary_key=True)
     is_service_prov = models.BooleanField(default=False)
     name = models.CharField(max_length=100)
-    email = models.EmailField(_('email address'), unique=True)
-    tel = models.IntegerField()
-    username = models.CharField(max_length=15)
-    password = models.CharField(max_length=50, default="123")
-    profile_pic = models.BinaryField()
+    last_name = models.CharField(max_length=100)
+    tel = models.IntegerField(null=True)
+    profile_pic = models.ImageField(upload_to='media/users', blank=True, null=True)
+    #email = models.CharField(max_length=60)
+    pass

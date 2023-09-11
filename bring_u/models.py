@@ -1,5 +1,5 @@
 from django.db import models
-
+from accounts.models import UserProfile
 class Business(models.Model):
     id_business = models.AutoField(primary_key=True)
     name = models.CharField(max_length=70)
@@ -14,17 +14,6 @@ class Product(models.Model):
     price = models.IntegerField()
     fk_id_business = models.ForeignKey(Business, on_delete=models.CASCADE)
 
-#Update this model (User)
-class User(models.Model):
-    id_user = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    username = models.CharField(max_length=15)
-    password = models.CharField(max_length=50, default="123")
-    is_service_prov = models.BooleanField()
-    email = models.CharField(max_length=60)
-    tel = models.IntegerField()
-    profile_pic = models.BinaryField()
-
 class Request(models.Model):
     id_request = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -35,6 +24,6 @@ class Request(models.Model):
     desc_delivery = models.CharField(max_length=1000, null=True)
     pick_up_location = models.CharField(max_length=250, default="Pick-up location")
     desc_pick_up_location = models.CharField(max_length=1000, null=True)
-    fk_id_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    fk_id_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     fk_id_business = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
 

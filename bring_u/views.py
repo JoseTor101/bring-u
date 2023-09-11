@@ -2,7 +2,8 @@ from django.shortcuts import render,  get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
-from .models import Business,Product, User, Request
+from .models import Business,Product, Request
+from accounts.models import UserProfile
 import json
 
 
@@ -27,7 +28,7 @@ def business(request):
 
 
     return render(request, 'business.html', businessesDict  )
-
+@login_required
 def product(request, id_business):
     business = get_object_or_404(Business, pk=id_business)
     products = business.product_set.all()  # Obtener todos los productos asociados al restaurante
