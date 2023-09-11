@@ -34,19 +34,24 @@ def product(request, id_business):
     return render(request, 'business_detail.html', {'business': business, 'products': products})
 
 @login_required
-def profile(request, id_del=None):
+def profile(request):
     #revisar esto
     user = request.user
     
+
     #MOSTRAR ORDENES EN CURSO
     #Buscar como obtener id de usuario de la manear apropiada
-    user_requests = Request.objects.filter(fk_id_user=2)
-    #print("😀",user_requests)
+    user_id = user.id
+    user_requests = Request.objects.filter(fk_id_user=user_id)
+    print("😀",user)
 
     context = {
         'user': user,
         'orders': user_requests,
     }
+
+    #ELIMINAR ORDEN
+
     if request.method == 'POST' and request.POST.get('_method') == 'DELETE':
         product_id = request.POST.get('product_id')
         try:

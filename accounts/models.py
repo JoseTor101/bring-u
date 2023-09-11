@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 class UserProfile(AbstractUser):
-    id_user = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     is_service_prov = models.BooleanField(default=False)
     name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
