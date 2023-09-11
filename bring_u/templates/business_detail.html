@@ -3,6 +3,7 @@
     {% block content %}
     <script>
 
+        // Mostrar en el Modal la información del producto 
         var data = {};
         
         function sendOrder(button) {
@@ -19,6 +20,7 @@
                 price: productPrice,
                 business: '{{ business.name }}' 
             };
+
             // Set the product details in the modal
             document.getElementById('productName').textContent = productName;
             document.getElementById('productDesc').textContent = productDesc;
@@ -27,30 +29,6 @@
 
             console.log(data);
         }
-        const delivery_form = document.getElementById('deliveryForm');
-    
-        delivery_form.addEventListener('submit', function(event) {
-            
-            event.preventDefault();
-    
-            const formData = new FormData(form);
-            const formDataObject = {};
-    
-            for (const [key, value] of formData.entries()) {
-                formDataObject[key] = value;
-            }
-    
-            const combinedData = {
-                ...data,
-                form: formDataObject
-            };
-        
-        });
-
-        /*
-        Buscar la manera de enviar la petición con la información completa
-        
-        */
        </script>
 
     <div class="container mt-5">
@@ -117,16 +95,20 @@
                                         </div>
                                         <div class="modal-body">
                                           <!-- DELIVERY FORM -->
-                                          <form class="row g-3" method="POST" id="deliveryForm" action="/business">
+                                          <form class="row g-3" method="POST" id="deliveryForm" action="/profile">
                                             {% csrf_token %}
                                             <div class="mb-3">
                                                 <label for="delivery_location" class="form-label"><strong> Lugar entrega:</strong></label>
-                                                <input type="text" class="form-control" id="delivery_location" name="delivery_location" placeholder="Ejemplo: Bloque 33, salon 302">
+                                                <input type="text" class="form-control" id="delivery_location" name="delivery_location" placeholder="Ejemplo: Bloque 33, salon 302" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="desc_delivery" class="form-label"><strong>Detalles sobre la entrega:</strong></label>
-                                                <input type="text" class="form-control" id="desc_delivery" name="desc_delivery" placeholder="Ejemplo: Esperarme afuera del salon">
+                                                <input type="text" class="form-control" id="desc_delivery" name="desc_delivery" placeholder="Ejemplo: Esperarme afuera del salon" required>
                                             </div>
+                                            <input type="text" value="{{ business.name }}" name="business_name" hidden="">
+                                            <input type="text" value="{{ product.name }}" name="product_name" hidden="">
+                                            <input type="text" value="{{ product.desc }}" name="product_desc" hidden="">
+                                            <input type="text" value="{{ product.price }}" name="product_price" hidden="">
                                             <button type="submit" class="btn btn-primary">Pedir</button>
                                         </form>
                                         </div>
