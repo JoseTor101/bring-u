@@ -15,8 +15,8 @@
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
+                            <h5 class="card-title">{{ order.id_request }}</h5>
                             <h5 class="card-title">{{ order.name }}</h5>
-                            <h5 class="card-title">{{ order.id_product }}</h5>
                             <h5 class="card-title">{{ order.fk_id_business }}</h5>
                             <p class="card-text">{{ order.desc }}</p>
                             <p class="card-text">Price: ${{ order.price }}</p>
@@ -46,7 +46,7 @@
                                             <form method="post" action="/profile">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="_method" value="DELETE">
-                                                <input type="hidden" name="product_id" value="{{ order.fk_id_product.id_product }}">
+                                                <input type="hidden" name="order_id" value="{{ order.id_request }}">
                                                 <button type="submit" class="btn btn-danger">Confirm Cancel</button>
                                             </form>
                                         </div>

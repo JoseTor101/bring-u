@@ -12,6 +12,7 @@ urlpatterns = [
     path('business/<int:id_business>/', bringuViews.product, name='business_detail'),
     path('profile', bringuViews.profile),
     path('request', bringuViews.orders),
+    path('my_request', bringuViews.my_request),
     path('accounts/', include('accounts.urls')),
 ]
 

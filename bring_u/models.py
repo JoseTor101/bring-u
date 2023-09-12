@@ -17,6 +17,10 @@ class Product(models.Model):
     price = models.IntegerField()
     fk_id_business = models.ForeignKey(Business, on_delete=models.CASCADE)
 
+# Define the upload_to function
+def upload_to(instance, filename):
+    # Generate a safe file path within the 'orders_media' directory
+    return f'media/{filename}'
 class Request(models.Model):
     id_request = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -27,7 +31,8 @@ class Request(models.Model):
     desc_delivery = models.CharField(max_length=1000, null=True)
     pick_up_location = models.CharField(max_length=250, default="Pick-up location")
     desc_pick_up_location = models.CharField(max_length=1000, null=True)
+    file= models.FileField(upload_to=upload_to, null=True)
     fk_id_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    fk_id_business = models.ForeignKey(Business, on_delete=models.SET_NULL, null=True)
     fk_id_product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    business_name = models.CharField(max_length=70, null=True)
 
