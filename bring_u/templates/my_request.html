@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container mt-5"></div>
+        <div class="row">
+            <div class="col" >
+                <h2>IMAGEN</h2>
+            </div>
+            <div class="col-8" >
+                <h2>SOLICITUD PERSONALIZADA</h2>
+                <form  method="POST" action="/my_request" class="row g-3" id="personalizedRequest" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name_order" class="form-label"><strong>Nombre de la orden</strong></label>
+                        <input type="text" class="form-control" name="name_order" id="name_order" placeholder="Ejemplo: Compra en Portalapiz" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="desc_order" class="form-label"><strong>Descripción de la orden</strong></label>
+                        <input type="text" class="form-control" name="desc_order" id="desc_order" placeholder="Descripcion general de la solicitud" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label"><strong>Precio</strong></label>
+                        <input type="number" class="form-control" name="price" id="price" placeholder="Ej: $14900" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pick_up_location" class="form-label"><strong>Lugar de recogida</strong></label>
+                        <input type="text" class="form-control" name="pick_up_location" id="pick_up_location" placeholder="Ej: Bloque 38-301" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="desc_pick_up_location" class="form-label"><strong>Descripcion lugar de recogida</strong></label>
+                        <textarea type="text" class="form-control" name="desc_pick_up_location" id="desc_pick_up_location" placeholder="¿Qué hago al llegar aquí?" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="delivery_location" class="form-label"><strong>Ubicación de entrega</strong></label>
+                        <input type="text" class="form-control" name="delivery_location" id="delivery_location" placeholder="Ej: Bloque 38-301" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="desc_delivery" class="form-label"><strong>Detalles adicionales ubicación de entrega</strong></label>
+                        <textarea class="form-control" name="desc_delivery" id="desc_delivery" placeholder="Ej: Avisarme cuando estés afuera" required></textarea>
+                    </div>  
+                    <div class="mb-3">
+                        <label for="file" class="form-label"><strong>Archivo</strong></label>
+                        <input type="file" class="form-control" name="file" id="file" placeholder="Provide file if needed">
+                    </div>
+                    <!-- Add any other fields you want to include here -->
+                
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+{% endblock %}

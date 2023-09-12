@@ -1,33 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>BRING-U</title>
-    <style>
+
+<style>
         #cards-request .card {
             margin: 0 100px; /* Adjust this value for the desired spacing */
         }
         .card {
             cursor: pointer;
         }
-    </style>
-</head>
+</style>
+
 <body>
     {% extends "base.html" %}
     {% block content %}
         <div class="container mt-5">
             <h1 style="text-align: center;">Solicitud </h1>
             <div class="d-flex justify-content-between align-items-center" id="cards-request">
-                <div class="card text-white bg-info mb-3"   style="max-width: 18rem;">
+                <div class="card text-white bg-info mb-3" onclick="redirectToLink('/my_request')"  style="max-width: 18rem;">
                     <div class="card-header" style="text-align: center;">PERSONALIZADA</div>
                     <div class="card-body">
                         <h5 class="card-title">Formulario :</h5>
                         <p class="card-text">Ingrese petición, nombre, descripción, precio, lugar de entrega</p>
                     </div>
                 </div>
-                <div class="card text-white bg-info mb-3" onclick="redirectToLink()" style="max-width: 18rem;">
+                <div class="card text-white bg-info mb-3" onclick="redirectToLink('/business')" style="max-width: 18rem;">
                     <div class="card-header" style="text-align: center;">NEGOCIOS</div>
                     <div class="card-body">
                         <h5 class="card-title">Redirigir a negocios:</h5>
@@ -39,7 +33,7 @@
 
         <script>
             function redirectToLink(url) {
-                window.location.href = '/business';
+                window.location.href = url;
             }
           </script>
     {% endblock %}

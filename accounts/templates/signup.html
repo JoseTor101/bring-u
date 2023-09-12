@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card mb-3">
+    <div class="row g-0">
+        <div>
+            <div class="card-body">
+                <h5 class="card-title">Sign Up</h5>
+                {% if error %}
+                    <div class="alert alert-danger mt-3" role="alert">
+                        {{ error }}
+                    </div>
+                {% endif %}               
+                <p class="card-text">
+                    <div class="card mx-auto" style="width: 30rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Complete todos los campos</h5>
+                            <form action="{% url 'signup' %}" method="POST" class="needs-validation">
+                                {% csrf_token %}
+                              
+                                {{ form.as_p }}
+                            <a href="/" class="card-link">Inicio</a>
+                            <button type="submit" class="btn btn-primary float-end">Sign Up</button>
+                        </div>
+                      </div>
+                      </form>                      
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
