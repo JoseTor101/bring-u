@@ -1,14 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Bring-u</title>
-</head>
 <body style="overflow-x: hidden;">
     {% extends "base.html" %}
     {% block content %}
+    <script>
+
+        // Mostrar en el Modal la información del producto 
+
+        function sendOrder(button) {
+            // Extract product details from data attributes
+            const productId = button.getAttribute('data-product-id');
+            const productName = button.getAttribute('data-product-name');
+            const productDesc = button.getAttribute('data-product-desc');
+            const productPrice = button.getAttribute('data-product-price');
+            const businessName = button.getAttribute('data-business-name');
+            
+
+            // Set the product details in the modal
+            document.getElementById('productName').textContent = productName;
+            document.getElementById('productDesc').textContent = productDesc;
+            document.getElementById('productPrice').textContent = productPrice;
+            document.getElementById('businessName').textContent = businessName;
+        
+            // Set the product details in form to send
+            document.getElementById('send_product_id').value = productId;
+            document.getElementById('send_product_name').value = productName;
+            document.getElementById('send_product_desc').value = productDesc;
+            document.getElementById('send_product_price').value = productPrice;
+            document.getElementById('send_business_name').value = businessName;
+
+
+            console.log(data);
+        }
+       </script>
+
     <div class="container mt-5">
         <div class="row">
             <div class="col">
@@ -18,29 +41,92 @@
                 <h2>Horario de Atención:</h2>
                 <p>Apertura: {{ business.opening_time }}</p>
                 <p>Cierre: {{ business.closing_time }}</p>
-            </div> 
+            </div>
             <div class="col-8">
                 <h2>Menú:</h2>
                 <ul style="list-style: none; height: 80vh; width: 100vw; overflow: auto; overflow-x: hidden;">
                     {% for product in products %}
-                        <li>
-                            <div class="row">
-                                <div class="col">
-                                    <strong>{{ product.name }}</strong><br>
-                                    Descripción: {{ product.desc }}<br>
-                                    Precio: {{ product.price }}
-                                </div>
-                                <div class="col">
-                                    <button class="btn btn-primary" type="submit">Ordenar</button>
-                                </div>
+                    <li>
+                        <div class="row">
+                            <div class="col">
+                                <strong>{{ product.name }}</strong><br>
+                                Descripción: {{ product.desc }}<br>
+                                Precio: {{ product.price }}
                             </div>
-                        </li>
-                        <br>
+                            <div class="col">
+                                <button class="btn btn-primary btn-ordenar" type="button"
+                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                data-product-id="{{ product.id_product }}"
+                                data-product-name="{{ product.name }}"
+                                data-product-desc="{{ product.desc }}"
+                                data-product-price="{{ product.price }}"
+                                data-business-name="{{ business.name }}"
+                                onclick="sendOrder(this)">
+                                    Ordenar
+                                </button>
+
+                                <!-- Modal -->
+                                <!-- CONFIRM ORDER -->
+                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog  modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">CONFIRMACION DE ORDEN</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                        <p><strong>Negocio: </strong><span id="businessName"></span></p>
+                                        <p><strong>Producto: </strong><span id="productName"></span></p>
+                                        <p><strong>Descripción: </strong><span id="productDesc"></span></p>
+                                        <p><strong>Precio: </strong><span id="productPrice"></span></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Confirmar</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <!-- SEND ORDER -->
+                                <div class="modal fade" id="exampleModalToggle2" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">DETALLES ENTREGA</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <!-- DELIVERY FORM -->
+                                          <form class="row g-3" method="POST" id="deliveryForm" action="/profile">
+                                            {% csrf_token %}
+                                            <div class="mb-3">
+                                                <label for="delivery_location" class="form-label"><strong> Lugar entrega:</strong></label>
+                                                <input type="text" class="form-control" id="delivery_location" name="delivery_location" placeholder="Ejemplo: Bloque 33, salon 302" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="desc_delivery" class="form-label"><strong>Detalles sobre la entrega:</strong></label>
+                                                <input type="text" class="form-control" id="desc_delivery" name="desc_delivery" placeholder="Ejemplo: Esperarme afuera del salon" required>
+                                            </div>
+                                            <input type="hidden" value="" name="business_name" id="send_business_name">
+                                            <input type="hidden" value="" name="product_id" id="send_product_id">
+                                            <input type="hidden" value="" name="product_name" id="send_product_name">
+                                            <input type="hidden" value="" name="product_desc" id="send_product_desc">
+                                            <input type="hidden" value="" name="product_price" id="send_product_price">
+                                            <button type="submit" class="btn btn-primary">Pedir</button>
+                                        </form>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </li>
+                    <br>
                     {% endfor %}
                 </ul>
             </div>
         </div>
     </div>
     {% endblock %}
+    
 </body>
-</html>
