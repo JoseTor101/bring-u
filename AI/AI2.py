@@ -1,7 +1,7 @@
 import sys
-sys.path.append("Lib")
+sys.path.append("../Lib")
+sys.path.append("../pytesseract")
 
-from PIL import Image
 import pytesseract
 from pytesseract import Output
 import os
@@ -17,6 +17,7 @@ img = cv2.imread(path)
 height, width, _ = img.shape
 
 # VISUALIZATION:
+print(pytesseract.get_languages())
 data = pytesseract.image_to_data(img, config=config, output_type=Output.DICT)
 amount_boxes = len(data['text'])
 for i in range(amount_boxes):
