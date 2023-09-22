@@ -1,3 +1,6 @@
+import sys
+sys.path.append("Lib")
+
 from PIL import Image
 import pytesseract
 from pytesseract import Output
