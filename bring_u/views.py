@@ -157,8 +157,10 @@ def my_request(request):
 def available_orders(request):
     user= request.user
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
+    user_requests = Request.objects.all()
     
     context = {
-        'is_delivering':is_delivering
+        'is_delivering':is_delivering,
+        'user_request':user_requests
     }
     return render(request, "available_orders.html", context)

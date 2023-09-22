@@ -2,5 +2,63 @@
     {% block content %}
         <div class="container mt-5">
             <h1>Available orders</h1>
+            <div class="container">
+                <div class="row">
+                    {% for order in user_request %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ order.delivery_location }}</h5>
+                                <h5 class="card-title">{{ order.name }}</h5>
+                                <h5 class="card-title">{{ order.fk_id_business }}</h5>
+                                <p class="card-text">{{ order.desc }}</p>
+                                <p class="card-text">Price: ${{ order.price }}</p>
+                                <p class="card-text" style="color:red">{{ order.status }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-success btn-cancel" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#cancelConfirmationModal{{ order.id_product }}">
+                                    Detalles
+                                </button>
+        
+                                <!-- Confirmation Modal -->
+                                <div class="modal fade" id="cancelConfirmationModal{{ order.id }}" tabindex="-1"
+                                    aria-labelledby="cancelConfirmationModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="cancelConfirmationModalLabel">Detalles de orden</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Detalles de la orden:
+                                                <p class="card-text">{{ order.name }}</p>
+                                                <p class="card-text">{{ order.price }}</p>
+                                                <p class="card-text">{{ order.delivery_location }}</p>
+                                                <p class="card-text">{{ order.desc_delivery }}</p>
+                                                {% if order.desc_pick_up_location %}
+                                                    <p class="card-text">{{ order.desc_pick_up_location }}</p>
+                                                {% endif %}
+                                                <p class="card-text"></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <form method="post" action="/profile">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <input type="hidden" name="order_id" value="{{ order.id_request }}">
+                                                    <button type="submit" class="btn btn-success">Tomar orden</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
 {% endblock %}  
