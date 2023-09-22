@@ -6,15 +6,19 @@ from accounts.models import UserProfile
 import json
 #manejo de imagenes
 from django.core.files.uploadedfile import SimpleUploadedFile
-
+#Campo requerido para ver la vista
+from .decorators import is_service_prov_required
 
 # Create your views here.
-
 def home(request):
-    return render(request, 'home.html')
+    user = request.user
+    #Verify if user is delivering 
+    is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
+    return render(request, 'home.html', {'is_delivering': is_delivering})
 
 def business(request):
     user = request.user
+    is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
 
     searchBusiness= request.GET.get('searchBusiness')
     if searchBusiness:
@@ -26,7 +30,8 @@ def business(request):
     
     businessesDict = {
         'businesses': businesses,
-        'searchRestaurant':searchBusiness
+        'searchRestaurant':searchBusiness,
+        'is_delivering':is_delivering
     } 
 
     #CREACION DE ORDEN
@@ -62,6 +67,7 @@ def profile(request):
     
     user = request.user
     user_profile = UserProfile.objects.get(username=user)
+    is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
 
     #MOSTRAR ORDENES EN CURSO
 
@@ -71,6 +77,7 @@ def profile(request):
     context = {
         'user': user,
         'orders': user_requests,
+        'is_delivering': is_delivering
     }
 
     #ELIMINAR ORDEN 
@@ -94,25 +101,34 @@ def profile(request):
             print("Voy a ser", "💙")
             user_profile.is_service_prov = True
             user_profile.save()
-            #return redirect("/profile")
+            return redirect("/available_orders")
         elif user.is_service_prov and not deliver_orders:
             print("Ya no más", "💙")
             user_profile.is_service_prov = False
             user_profile.save()
-            #return redirect("/profile")
+            return redirect("/profile")
     
     
     return render(request, 'profile.html', context)
 
 #SELECCIONAR SI QUIERES UNA PETICION PERSONALIZADA O DE RESTAURANTES
 def orders(request):
-    return render(request, 'request.html')
+    user = request.user
+    is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
+    context = {
+        'is_delivering':is_delivering
+    }
+    return render(request, 'request.html', context)
 
 #CREAR SOLICITUD PERSONALIZADA EN "my_request.html"
 
 def my_request(request):
     user = request.user
+    is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
 
+    context = {
+        'is_delivering':is_delivering
+    }
     if request.method == "POST":
         form_data = request.POST
         uploaded_file = request.FILES.get('file') 
@@ -130,8 +146,19 @@ def my_request(request):
                 file=SimpleUploadedFile(uploaded_file.name, uploaded_file.read()) if uploaded_file else None,
             )
 
-        return redirect('/profile')
+        return redirect('/profile', context)
 
 
 
-    return render(request, 'my_request.html')
+    return render(request, 'my_request.html', context)
+
+
+@is_service_prov_required
+def available_orders(request):
+    user= request.user
+    is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
+    
+    context = {
+        'is_delivering':is_delivering
+    }
+    return render(request, "available_orders.html", context)
