@@ -14,6 +14,8 @@ def home(request):
     return render(request, 'home.html')
 
 def business(request):
+    user = request.user
+
     searchBusiness= request.GET.get('searchBusiness')
     if searchBusiness:
         businesses = Business.objects.filter(name__icontains = searchBusiness)
@@ -27,44 +29,7 @@ def business(request):
         'searchRestaurant':searchBusiness
     } 
 
-
-    return render(request, 'business.html', businessesDict  )
-@login_required
-def product(request, id_business):
-    business = get_object_or_404(Business, pk=id_business)
-    products = business.product_set.all()  # Obtener todos los productos asociados al restaurante
-    return render(request, 'business_detail.html', {'business': business, 'products': products})
-
-@login_required
-def profile(request):
-    
-    user = request.user
-    
-    #MOSTRAR ORDENES EN CURSO
-
-    user_id = user.id
-    user_requests = Request.objects.filter(fk_id_user=user.id)
-    
-    context = {
-        'user': user,
-        'orders': user_requests,
-    }
-
-    #ELIMINAR ORDEN 
-    #  - Las funciones (ELIMINAR, CREAR) están en este orden para que no haya conflicto con la creación de instancias ;)
-
-    if request.method == 'POST' and request.POST.get('_method') == 'DELETE':
-        order_id = request.POST.get('order_id')  # Retrieve the id_request from the POST data
-        try:
-            delete_order = Request.objects.get(id_request=order_id)
-            delete_order.delete()
-        except Request.DoesNotExist:
-            pass
-        return redirect('/profile')
-
-
     #CREACION DE ORDEN
-
     if request.method == "POST":
         form_data = request.POST
         user_id = UserProfile.objects.get(id=user.id)
@@ -85,6 +50,58 @@ def profile(request):
 
         return redirect('/profile')
 
+    return render(request, 'business.html', businessesDict  )
+@login_required
+def product(request, id_business):
+    business = get_object_or_404(Business, pk=id_business)
+    products = business.product_set.all()  # Obtener todos los productos asociados al restaurante
+    return render(request, 'business_detail.html', {'business': business, 'products': products})
+
+@login_required
+def profile(request):
+    
+    user = request.user
+    user_profile = UserProfile.objects.get(username=user)
+
+    #MOSTRAR ORDENES EN CURSO
+
+    user_id = user.id
+    user_requests = Request.objects.filter(fk_id_user=user.id)
+    
+    context = {
+        'user': user,
+        'orders': user_requests,
+    }
+
+    #ELIMINAR ORDEN 
+
+    if request.method == 'POST' and request.POST.get('_method') == 'DELETE':
+        order_id = request.POST.get('order_id')  # Retrieve the id_request from the POST data
+        try:
+            delete_order = Request.objects.get(id_request=order_id)
+            delete_order.delete()
+        except Request.DoesNotExist:
+            pass
+        return redirect('/profile') 
+
+    #ENTREGAR PEDIDOS 
+    print(request)
+    if request.method == 'POST':
+        deliver_orders = request.POST.get('deliver-orders')
+        #deliver_orders = request.POST
+        print(deliver_orders, "💫")
+        if not user.is_service_prov and (deliver_orders == 'on'):
+            print("Voy a ser", "💙")
+            user_profile.is_service_prov = True
+            user_profile.save()
+            #return redirect("/profile")
+        elif user.is_service_prov and not deliver_orders:
+            print("Ya no más", "💙")
+            user_profile.is_service_prov = False
+            user_profile.save()
+            #return redirect("/profile")
+    
+    
     return render(request, 'profile.html', context)
 
 #SELECCIONAR SI QUIERES UNA PETICION PERSONALIZADA O DE RESTAURANTES
