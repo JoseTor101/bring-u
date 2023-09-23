@@ -163,4 +163,8 @@ def available_orders(request):
         'is_delivering':is_delivering,
         'user_request':user_requests
     }
+
+    #Tomar ordenes 
+
+    
     return render(request, "available_orders.html", context)

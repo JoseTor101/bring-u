@@ -64,8 +64,7 @@
             <p><strong>Tel:</strong> {{ user.tel }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><input type="text" name="" id="is_service_prov" value="{{ user.is_service_prov }}" hidden></p>
-            <p>{{ user.is_service_prov }}</p>
-
+ 
             <form method="POST" action="/profile" id="toggle-form">
                 {% csrf_token %}
                 <div id="container">
@@ -137,14 +136,11 @@
             const form = document.getElementById('toggle-form');
             const checkbox = document.getElementById('deliver-orders');
             const isServiceProv = document.getElementById('is_service_prov');
-            // Set the initial state of the checkbox based on the value of is_service_prov
             
             checkbox.checked = isServiceProv.value === 'True' ? true : false;
             
             //checkbox.checked = isServiceProv.value;
             checkbox.addEventListener('change', function () {
-                console.log('----', isServiceProv.value);
-                console.log('Checkbox', checkbox.checked);
                 form.submit();
             })
 
