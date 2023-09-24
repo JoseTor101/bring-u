@@ -36,3 +36,9 @@ class Request(models.Model):
     fk_id_product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     business_name = models.CharField(max_length=70, null=True)
 
+class Delivery(models.Model):
+    id_delivery = models.AutoField(primary_key=True)
+    fk_id_request = models.ForeignKey(Request, on_delete=models.CASCADE)
+    fk_id_client = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='client_deliveries', default=None)
+    fk_id_delivery_man = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='delivery_man_deliveries')
+    time = models.TimeField(auto_now=True)

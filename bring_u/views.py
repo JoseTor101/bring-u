@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import Business,Product, Request
+from .models import Business,Product, Request, Delivery
 from accounts.models import UserProfile
 import json
 #manejo de imagenes
@@ -68,6 +68,7 @@ def profile(request):
     user = request.user
     user_profile = UserProfile.objects.get(username=user)
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
+    deliveries = Delivery.objects.filter(fk_id_delivery_man=user_profile.id)
 
     #MOSTRAR ORDENES EN CURSO
 
@@ -77,7 +78,8 @@ def profile(request):
     context = {
         'user': user,
         'orders': user_requests,
-        'is_delivering': is_delivering
+        'is_delivering': is_delivering,
+        'deliveries':deliveries
     }
 
     #ELIMINAR ORDEN 
@@ -91,19 +93,29 @@ def profile(request):
             pass
         return redirect('/profile') 
 
+    #CANCELAR ENTREGA
+
+    if request.method == 'POST' and request.POST.get('_delivery') == 'DELETE':
+        delivery_id = request.POST.get('delivery_id')  # Retrieve the id_request from the POST data
+        try:
+            delete_order = Delivery.objects.get(id_delivery=delivery_id)
+            order_untake = Request.objects.get(id_request=delete_order.fk_id_request.id_request)
+            order_untake.status = "Sin tomar"
+            order_untake.save()
+            delete_order.delete()
+        except Request.DoesNotExist:
+            pass
+        return redirect('/profile') 
+
     #ENTREGAR PEDIDOS 
     print(request)
     if request.method == 'POST':
         deliver_orders = request.POST.get('deliver-orders')
-        #deliver_orders = request.POST
-        print(deliver_orders, "💫")
         if not user.is_service_prov and (deliver_orders == 'on'):
-            print("Voy a ser", "💙")
             user_profile.is_service_prov = True
             user_profile.save()
             return redirect("/available_orders")
         elif user.is_service_prov and not deliver_orders:
-            print("Ya no más", "💙")
             user_profile.is_service_prov = False
             user_profile.save()
             return redirect("/profile")
@@ -152,19 +164,50 @@ def my_request(request):
 
     return render(request, 'my_request.html', context)
 
-
+#VER ÓRDENES QUE SE PUEDEN TOMAR EN "available_orders.html"
 @is_service_prov_required
 def available_orders(request):
     user= request.user
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
-    user_requests = Request.objects.all()
-    
+    #user_requests = Request.objects.all()
+    user_requests = Request.objects.exclude(status="Tomado")
+
     context = {
         'is_delivering':is_delivering,
         'user_request':user_requests
     }
 
     #Tomar ordenes 
+    if request.method == "POST":
 
-    
+            # Check if the user already has an ongoing delivery
+            try:
+                current_delivery = Delivery.objects.filter(fk_id_delivery_man=user).latest('time')
+                order_status = Request.objects.get(id_request=current_delivery.fk_id_request.id_request, status="Tomado")
+
+                if order_status:
+                    return redirect('/')
+
+            except Delivery.DoesNotExist:
+                order_id = request.POST.get('order_id')  
+                order = Request.objects.get(id_request=order_id)
+
+                delivery_exists = Delivery.objects.filter(fk_id_request=order_id).first()
+
+                if not delivery_exists:
+                    user_id = UserProfile.objects.get(username=user).id
+                    fk_client = UserProfile.objects.get(username=order.fk_id_user)
+
+                    Delivery.objects.create(
+                        fk_id_request=order,
+                        fk_id_client = fk_client,
+                        fk_id_delivery_man = user,
+                    )
+                    order.status = "Tomado"
+                    order.save()
+                    return redirect('/profile')
+                else:
+                    print('Orden ya tomada')
+                    return redirect('/')
+
     return render(request, "available_orders.html", context)

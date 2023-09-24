@@ -21,6 +21,6 @@ def is_service_prov_required(view_func):
             
             return view_func(request, *args, **kwargs)
         except:
-            return redirect('accounts/login')
+            return redirect('/')
     
     return _wrapped_view

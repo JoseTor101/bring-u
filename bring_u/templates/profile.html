@@ -1,107 +1,118 @@
-    {% extends "base.html" %}
-    
-    {% block content %}
-        <style>
-            * {
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    * {
         margin: 0;
         padding: 0;
-        }
+    }
 
-        #container {
-            display: flex;
-            flex-direction: row;
-        }
-        #title {
-            margin-bottom: 40px;
-        }
-        #switch{
-            position: relative;
-            display: inline-block;
-            width: 110px;
-            height: 60px;
-            margin: 0 10px;
-        }
-        #slid{
-            position: absolute;
-            cursor: pointer;
-            top:0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
+    #container {
+        display: flex;
+        flex-direction: row;
+    }
 
-        }
-        #switch input {display:none}
+    #title {
+        margin-bottom: 40px;
+    }
 
-        #slid:before {
-            position: absolute;
-            content: "";
-            height: 50px;
-            width: 50px;
-            left: 5px;
-            bottom: 5px;
-            background-color: white;
-            transition: 0.4s;
-            border-radius: 50px;
-        }
+    #switch {
+        position: relative;
+        display: inline-block;
+        width: 110px;
+        height: 60px;
+        margin: 0 10px;
+    }
 
-        input:checked + #slid {
-            background-color: #ff278c;
-        }
-        input:checked + #slid:before {
-            transform: translateX(50px);
-        }
-        </style>
-        <div class="container mt-5">
-            <h1>Perfil </h1>
-            <h3>User Profile</h3>
-            
-            <p><strong>Username:</strong> {{ user.username }}</p>
-            <p><strong>First Name:</strong> {{ user.first_name }}</p>
-            <p><strong>Last Name:</strong> {{ user.last_name }}</p>
-            <p><strong>Tel:</strong> {{ user.tel }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><input type="text" name="" id="is_service_prov" value="{{ user.is_service_prov }}" hidden></p>
- 
-            <form method="POST" action="/profile" id="toggle-form">
-                {% csrf_token %}
-                <div id="container">
-                    <h3 id="title">Entregar Órdenes</h3>
-                    <label id="switch" for="deliver-orders">
-                        <input type="checkbox" name="deliver-orders" id="deliver-orders">
-                        <span id="slid"></span>
-                    </label>
-                </div>
-            </form>
-            <h2>Órdenes en curso</h2>
-            <div class="container">
+    #slid {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+
+    }
+
+    #switch input {
+        display: none
+    }
+
+    #slid:before {
+        position: absolute;
+        content: "";
+        height: 50px;
+        width: 50px;
+        left: 5px;
+        bottom: 5px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50px;
+    }
+
+    input:checked+#slid {
+        background-color: #ff278c;
+    }
+
+    input:checked+#slid:before {
+        transform: translateX(50px);
+    }
+</style>
+<div class="container mt-5">
+    <h1>Perfil </h1>
+    <h3>User Profile</h3>
+
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>First Name:</strong> {{ user.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+    <p><strong>Tel:</strong> {{ user.tel }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><input type="text" name="" id="is_service_prov" value="{{ user.is_service_prov }}" hidden></p>
+
+    <form method="POST" action="/profile" id="toggle-form">
+        {% csrf_token %}
+        <div id="container">
+            <h3 id="title">Entregar Órdenes</h3>
+            <label id="switch" for="deliver-orders">
+                <input type="checkbox" name="deliver-orders" id="deliver-orders">
+                <span id="slid"></span>
+            </label>
+        </div>
+    </form>
+
+    {% if is_delivering %}
+        <h2>Órdenes tomadas</h2>
+        <div class="container">
             <div class="row">
-                {% for order in orders %}
+                {% for delivery in deliveries %}
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{ order.id_request }}</h5>
-                            <h5 class="card-title">{{ order.name }}</h5>
-                            <h5 class="card-title">{{ order.fk_id_business }}</h5>
-                            <p class="card-text">{{ order.desc }}</p>
-                            <p class="card-text">Price: ${{ order.price }}</p>
-                            <p class="card-text" style="color:red">{{ order.status }}</p>
+                            <h5 class="card-text">Pedido: {{ delivery.fk_id_request.name}}</h5>
+                            <p class="card-text"><b>Cliente: </b> {{ delivery.fk_id_client.first_name}} {{ delivery.fk_id_client.last_name }}</p>
+                            <p class="card-text"><b>Hora pedido tomado: </b> {{ delivery.time }}</p>
+                            <p class="card-text"><b>Ir a: </b> {{ delivery.fk_id_request.pick_up_location }}</p>
+                            <p class="card-text"><b>Llevar a: </b> {{ delivery.fk_id_request.delivery_location }}</p>
+                            <p class="card-title"><b>Precio: </b> ${{ delivery.fk_id_request.price }}</p>
+                            <p class="card-text" style="color:red">{{ delivery.status }}</p>
                         </div>
                         <div class="card-footer">
                             <button class="btn btn-danger btn-cancel" type="button" data-bs-toggle="modal"
-                                data-bs-target="#cancelConfirmationModal{{ order.id_product }}">
+                                data-bs-target="#cancelConfirmationModal{{ delivery.id_product }}">
                                 Cancel
                             </button>
-    
+
                             <!-- Confirmation Modal -->
-                            <div class="modal fade" id="cancelConfirmationModal{{ order.id }}" tabindex="-1"
+                            <div class="modal fade" id="cancelConfirmationModal{{ delivery.id }}" tabindex="-1"
                                 aria-labelledby="cancelConfirmationModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="cancelConfirmationModalLabel">Confirm Cancellation</h5>
+                                            <h5 class="modal-title" id="cancelConfirmationModalLabel">Confirm Cancellation
+                                            </h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
@@ -109,11 +120,12 @@
                                             Are you sure you want to cancel this order?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
                                             <form method="post" action="/profile">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <input type="hidden" name="order_id" value="{{ order.id_request }}">
+                                                <input type="hidden" name="_delivery" value="DELETE">
+                                                <input type="hidden" name="delivery_id" value="{{ delivery.id_delivery }}">
                                                 <button type="submit" class="btn btn-danger">Confirm Cancel</button>
                                             </form>
                                         </div>
@@ -126,26 +138,80 @@
                 {% endfor %}
             </div>
         </div>
-        
-        
-            <h2>Historial de ordenes</h2>
+    {% endif %}
+    <h2>Pedidos</h2>
+    <div class="container">
+        <div class="row">
+            {% for order in orders %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ order.id_request }}</h5>
+                        <h5 class="card-title">{{ order.name }}</h5>
+                        <h5 class="card-title">{{ order.fk_id_business }}</h5>
+                        <p class="card-text">{{ order.desc }}</p>
+                        <p class="card-text">Price: ${{ order.price }}</p>
+                        <p class="card-text" style="color:red">{{ order.status }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-danger btn-cancel" type="button" data-bs-toggle="modal"
+                            data-bs-target="#cancelConfirmationModal{{ order.id_product }}">
+                            Cancel
+                        </button>
+
+                        <!-- Confirmation Modal -->
+                        <div class="modal fade" id="cancelConfirmationModal{{ order.id }}" tabindex="-1"
+                            aria-labelledby="cancelConfirmationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="cancelConfirmationModalLabel">Confirm Cancellation
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to cancel this order?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <form method="post" action="/profile">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="order_id" value="{{ order.id_request }}">
+                                            <button type="submit" class="btn btn-danger">Confirm Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        <script>
-            //ACTIVAR / DESACTIVAR ENTREGA DE PEDIDOS 
-
-            const form = document.getElementById('toggle-form');
-            const checkbox = document.getElementById('deliver-orders');
-            const isServiceProv = document.getElementById('is_service_prov');
-            
-            checkbox.checked = isServiceProv.value === 'True' ? true : false;
-            
-            //checkbox.checked = isServiceProv.value;
-            checkbox.addEventListener('change', function () {
-                form.submit();
-            })
+    </div>
 
 
-        </script>
-        
-        
-    {% endblock %}
+    <h2>Historial de ordenes</h2>
+</div>
+<script>
+    //ACTIVAR / DESACTIVAR ENTREGA DE PEDIDOS 
+
+    const form = document.getElementById('toggle-form');
+    const checkbox = document.getElementById('deliver-orders');
+    const isServiceProv = document.getElementById('is_service_prov');
+
+    checkbox.checked = isServiceProv.value === 'True' ? true : false;
+
+    //checkbox.checked = isServiceProv.value;
+    checkbox.addEventListener('change', function () {
+        form.submit();
+    })
+
+
+</script>
+
+
+{% endblock %}
