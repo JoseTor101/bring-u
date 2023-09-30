@@ -78,32 +78,24 @@
     <script>
         var currentUrl = window.location.href;
         var user = document.getElementById('user').getAttribute('data-user');
+        var chatContainer = $(".chat-container");
 
-        function addMessageAndScrollToBottom(message) {
-            var chatContainer = $(".chat-container");
-            var isUserAtBottom = chatContainer.scrollTop() + chatContainer.innerHeight() >= chatContainer[0].scrollHeight;
-
-            var temp = "<div class='messages " + (message.user === user ? 'messages-sent' : 'messages-received') + "' data-sender='" + message.user + "'>" +
-                "<span class='message-sender'>" + message.user + "</span>" +
-                "<p>" + message.value + "</p>" +
-                "<p>" + message.date + "</p>" +
-                "</div>";
-
-            chatContainer.append(temp); // Append new message
-
-            if (isUserAtBottom) {
-                chatContainer.scrollTop(chatContainer[0].scrollHeight);
-            }
-        }
 
         function fetchAndUpdateMessages() {
             $.ajax({
                 type: 'GET',
                 url: currentUrl,
                 success: function (response) {
+                    var chatContainer = $(".chat-container");
+                    chatContainer.empty();
                     for (var i = 0; i < response.messages.length; i++) {
                         var message = response.messages[i];
-                        addMessageAndScrollToBottom(message);
+                        var temp = "<div class='messages " + (message.user === user ? 'messages-sent' : 'messages-received') + "' data-sender='" + message.user + "'>" +
+                            "<span class='message-sender'>" + message.user + "</span>" +
+                            "<p>" + message.value + "</p>" +
+                            "<p>" + message.date + "</p>" +
+                            "</div>";
+                        chatContainer.append(temp); // Append new message
                     }
                 },
                 error: function (response) {
@@ -111,8 +103,6 @@
                 }
             });
         }
-
-
         // Set an interval to fetch and update messages every 1 second (1000 milliseconds)
         setInterval(fetchAndUpdateMessages, 1000);
 
