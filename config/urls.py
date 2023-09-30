@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-
 from bring_u import views as bringuViews 
 
 urlpatterns = [
@@ -15,6 +14,7 @@ urlpatterns = [
     path('my_request', bringuViews.my_request),
     path('available_orders', bringuViews.available_orders),
     path('accounts/', include('accounts.urls')),
+    path('chat/', include('chat.urls')),
 ]
 
 

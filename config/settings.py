@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bring_u',
     'accounts',
+    'chat',
 ]
 
 MIDDLEWARE = [
