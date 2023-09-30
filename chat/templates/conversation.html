@@ -1,4 +1,146 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Conversacion</h1>
+
+
+<style>
+    body {
+        margin: 0; /* Remove margin to avoid unexpected scrolling behavior */
+        padding: 0; /* Remove padding to avoid unexpected scrolling behavior */
+    }
+    .chat-container {
+        max-height: 400px; /* Adjust the maximum height as needed */
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Align messages to the bottom (right-aligned sent messages) */
+    }
+    .messages {
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px;
+        max-width: 70%; /* Adjust as needed */
+    }
+    .messages-sent {
+        background-color: #cfe2ff; /* Example background color for sent messages */
+        align-self: flex-end;
+    }
+    .messages-received {
+        background-color: #f0f0f0; /* Example background color for received messages */
+        align-self: flex-start;
+    }
+    .message-sender {
+        font-weight: bold;
+    }
+    .message-input-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: #f0f0f0; /* Background color for the input container */
+    }
+    .message-input {
+        flex-grow: 1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        margin-right: 10px;
+    }
+    .send-button {
+        background-color: #007bff; /* Example background color for the send button */
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <h1>Conversacion {{ chat.id_chat }}</h1>
+    <span id="user" data-user="{{ user }}"></span>
+    <div class="chat-container">
+        {% for message in messages %}
+        <div class="messages {% if message.sender == user %}messages-sent{% else %}messages-received{% endif %}" data-sender="{{ message.sender }}">
+            <span class="message-sender">{{ message.sender }}</span>
+            <p>{{ message.content }}</p>
+            <p>{{ message.timestamp }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="message-input-container">
+        <form id="message-form" method="POST">
+            {% csrf_token %}
+            <textarea id="message" name="content" placeholder="Type your message..."></textarea>
+            <button type="submit" id="send-button" >Send</button>
+        </form>
+    </div>
+
+    <script>
+        var currentUrl = window.location.href;
+        var user = document.getElementById('user').getAttribute('data-user');
+        // Function to fetch and update messages
+       // Function to fetch and update messages
+        function fetchAndUpdateMessages() {
+            $.ajax({
+                type: 'GET',
+                url: currentUrl,
+                success: function (response) {
+                    //console.log(response);
+                    var chatContainer = $(".chat-container");
+                    chatContainer.empty();
+                    for (var i = 0; i < response.messages.length; i++) {
+                        var message = response.messages[i];
+                        var temp = "<div class='messages " + (message.user === user ? 'messages-sent' : 'messages-received') + "' data-sender='" + message.user + "'>" +
+                            "<span class='message-sender'>" + message.user + "</span>" +
+                            "<p>" + message.value + "</p>" +
+                            "<p>" + message.date + "</p>" +
+                            "</div>";
+                        chatContainer.append(temp); // Append new message
+                    }
+                },
+                error: function (response) {
+                    console.error('An error occurred');
+                }
+            });
+        }
+
+        // Set an interval to fetch and update messages every 1 second (1000 milliseconds)
+        setInterval(fetchAndUpdateMessages, 1000);
+
+        $(document).on('submit', '#message-form', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: currentUrl,  // Update the URL to match your view's URL
+                data: {
+                    content: $('#message').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {
+                    if (data.success) {
+                        // Handle success (e.g., clear the form, update the chat interface)
+                        $('#message').val('');
+                    } else {
+                        // Handle form validation errors
+                        console.error(data.errors);
+                    }
+                },
+                error: function (xhr, errmsg, err) {
+                    // Handle AJAX error
+                    console.error(errmsg);
+                }
+            });
+        });
+
+        // Optional: Handle form submission when the user presses Enter in the textarea
+        $('#message').keydown(function (event) {
+            if (event.keyCode === 13) { // Check for Enter key (key code 13)
+                event.preventDefault();
+                $('#send-button').click(); // Trigger the Send button click event
+            }
+        });
+    </script>
+</body>
+</html>
 {% endblock content %}
