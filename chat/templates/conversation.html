@@ -8,8 +8,7 @@
         padding: 0; /* Remove padding to avoid unexpected scrolling behavior */
     }
     .chat-container {
-        max-height: 400px; /* Adjust the maximum height as needed */
-        overflow-y: auto;
+        height: auto; /* Adjust the maximum height as needed */
         display: flex;
         flex-direction: column;
         justify-content: flex-start; /* Align messages to the bottom (right-aligned sent messages) */
@@ -58,7 +57,7 @@
 <body>
     <h1>Conversacion {{ chat.id_chat }}</h1>
     <span id="user" data-user="{{ user }}"></span>
-    <div class="chat-container">
+    <div class="chat-container" id="chat-container">
         {% for message in messages %}
         <div class="messages {% if message.sender == user %}messages-sent{% else %}messages-received{% endif %}" data-sender="{{ message.sender }}">
             <span class="message-sender">{{ message.sender }}</span>
@@ -79,24 +78,32 @@
     <script>
         var currentUrl = window.location.href;
         var user = document.getElementById('user').getAttribute('data-user');
-        // Function to fetch and update messages
-       // Function to fetch and update messages
+
+        function addMessageAndScrollToBottom(message) {
+            var chatContainer = $(".chat-container");
+            var isUserAtBottom = chatContainer.scrollTop() + chatContainer.innerHeight() >= chatContainer[0].scrollHeight;
+
+            var temp = "<div class='messages " + (message.user === user ? 'messages-sent' : 'messages-received') + "' data-sender='" + message.user + "'>" +
+                "<span class='message-sender'>" + message.user + "</span>" +
+                "<p>" + message.value + "</p>" +
+                "<p>" + message.date + "</p>" +
+                "</div>";
+
+            chatContainer.append(temp); // Append new message
+
+            if (isUserAtBottom) {
+                chatContainer.scrollTop(chatContainer[0].scrollHeight);
+            }
+        }
+
         function fetchAndUpdateMessages() {
             $.ajax({
                 type: 'GET',
                 url: currentUrl,
                 success: function (response) {
-                    //console.log(response);
-                    var chatContainer = $(".chat-container");
-                    chatContainer.empty();
                     for (var i = 0; i < response.messages.length; i++) {
                         var message = response.messages[i];
-                        var temp = "<div class='messages " + (message.user === user ? 'messages-sent' : 'messages-received') + "' data-sender='" + message.user + "'>" +
-                            "<span class='message-sender'>" + message.user + "</span>" +
-                            "<p>" + message.value + "</p>" +
-                            "<p>" + message.date + "</p>" +
-                            "</div>";
-                        chatContainer.append(temp); // Append new message
+                        addMessageAndScrollToBottom(message);
                     }
                 },
                 error: function (response) {
@@ -104,6 +111,7 @@
                 }
             });
         }
+
 
         // Set an interval to fetch and update messages every 1 second (1000 milliseconds)
         setInterval(fetchAndUpdateMessages, 1000);
