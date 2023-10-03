@@ -4,6 +4,9 @@ from accounts.models import UserProfile  # Import your UserProfile model
 from django.utils import timezone
 from django.http import JsonResponse
 import json
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 
 def Chats(request):
     user = request.user
@@ -18,6 +21,9 @@ def Chats(request):
     }
     return render(request, 'chats.html', context)
 
+from django.http import JsonResponse
+import json
+
 def Conversation(request, id_chat):
     user = request.user
     current_user = UserProfile.objects.get(username=user)
@@ -25,10 +31,11 @@ def Conversation(request, id_chat):
     messages = Message.objects.filter(fk_id_chat=chat)
 
     context = {
-        'user':user,
+        'user': user,
         'chat': chat,
-        'messages': messages
-        }
+        'messages': messages,
+        'chatId': chat.id_chat,
+    }
 
     if request.method == 'GET':
         if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
@@ -41,13 +48,13 @@ def Conversation(request, id_chat):
                 }
                 for message in messages
             ]
-            return JsonResponse({'messages': messages_list})
+            #return JsonResponse({'messages': messages_list})
+            return render(request, 'conversation.html', context)
         else:
             # For regular page request, return the HTML page
             return render(request, 'conversation.html', context)
-        
+
     if request.method == 'POST':
-        print("hola")
         content = request.POST.get('content')
 
         # Create a new Message instance
@@ -62,9 +69,20 @@ def Conversation(request, id_chat):
         chat.last_update = timezone.now()
         chat.save()
 
-        return JsonResponse({'success': True})
+        # Send the message via WebSocket
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"chat_{id_chat}",
+            {
+                "type": "chatbox_message",
+                "message": content,
+                "username": user,
+                "chat_id": id_chat,
+            },
+        )
 
+        return render(request, 'conversation.html', context)
+        #return JsonResponse({'success': True})
 
-    
+    return render(request, 'conversation.html', context)
 
-    return render(request, 'conversation.html',context)

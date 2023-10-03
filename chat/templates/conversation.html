@@ -55,7 +55,7 @@
 </style>
 
 <body>
-    <h1>Conversacion {{ chat.id_chat }}</h1>
+    <h1 id="title" data-chat-id="{{ chatId }}">Conversacion {{ chat.id_chat }}</h1>
     <span id="user" data-user="{{ user }}"></span>
     <div class="chat-container" id="chat-container">
         {% for message in messages %}
@@ -76,10 +76,60 @@
     </div>
 
     <script>
-        var currentUrl = window.location.href;
+        var currentUrl = window.location;
         var user = document.getElementById('user').getAttribute('data-user');
         var chatContainer = $(".chat-container");
+        var chatId = document.getElementById('title').getAttribute('data-chat-id');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message');  
 
+        const chatSocket = new WebSocket(
+            'wss://' +
+            window.location.host +
+            '/ws/chat/' +
+            chatId +  // Replace with the variable that holds the chat_id
+            '/'
+        );
+        
+        
+        chatSocket.onopen = function (event) {
+            // WebSocket is open and ready to send messages
+            messageForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const message = messageInput.value;
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': user_username,
+                }));
+                messageInput.value = '';
+            });
+        };
+        
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const messageClass = data.user === user_user ? 'messages-sent' : 'messages-received';
+            const messageElement = document.createElement('div');
+            messageElement.className = `messages ${messageClass}`;
+            messageElement.innerHTML = `
+                <span class="message-sender">${data.user}</span>
+                <p>${data.message}</p>
+            `;
+            chatContainer.appendChild(messageElement);
+            location.reload();
+        };
+
+
+      
+    </script>
+
+    <!--<script>
+        var currentUrl = window.location;
+        var user = document.getElementById('user').getAttribute('data-user');
+        var chatContainer = $(".chat-container");
+        var chatId = document.getElementById('title').getAttribute('data-chat-id');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('input');  
 
         function fetchAndUpdateMessages() {
             $.ajax({
@@ -138,7 +188,17 @@
                 $('#send-button').click(); // Trigger the Send button click event
             }
         });
-    </script>
+
+        document.querySelector('#submit').onclick = function (e) {
+        const messageInputDom = document.querySelector('#input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'username': user_username,
+        }));
+        messageInputDom.value = '';
+        };
+    </script>-->
 </body>
 </html>
 {% endblock content %}

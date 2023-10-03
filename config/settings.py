@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-t45gl3e+n1v9-(8@$6&$p8d1)(uh25knwxz1pz5k101d+s1h5e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ['127.0.0.1','192.168.43.211']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.43.211','10.164.7.213', '192.168.25.49','10.164.7.213']
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bring_u',
     'accounts',
     'chat',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,13 @@ MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = "accounts.UserProfile"  
+
+ASGI_APPLICATION = "config.routing.application" #routing.py will be created later
+#ASGI_APPLICATION = "bring_u.routing.application"
+
+#Change'BACKEND' InMemoryChannel when creating a production version
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': "channels.layers.InMemoryChannelLayer"
+        }
+    }
