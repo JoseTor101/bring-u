@@ -14,6 +14,7 @@ urlpatterns = [
     path('request', bringuViews.orders),
     path('my_request', bringuViews.my_request),
     path('accounts/', include('accounts.urls')),
+    path('addmenu/', bringuViews.addmenu),
 ]
 
 
