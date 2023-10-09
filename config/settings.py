@@ -133,7 +133,7 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = "accounts.UserProfile"  
 
-ASGI_APPLICATION = "config.routing.application" #routing.py will be created later
+ASGI_APPLICATION = "chat.routing.application" #routing.py will be created later
 #ASGI_APPLICATION = "bring_u.routing.application"
 
 #Change'BACKEND' InMemoryChannel when creating a production version

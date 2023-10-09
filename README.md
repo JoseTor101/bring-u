@@ -5,6 +5,8 @@
 - 'channels': pip install channels
 - 'daphne': pip install daphne 
 - Modify channels install: python -m pip install -U channels["daphne"].
+- pip install twisted[http2,tls]
+
 
 It's crucial to add this installed products in the settings files -> "INSTALLED_APPS"
 

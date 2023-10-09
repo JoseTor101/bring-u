@@ -99,7 +99,7 @@
                 const message = messageInput.value;
                 chatSocket.send(JSON.stringify({
                     'message': message,
-                    'username': user_username,
+                    'username': "{{request.user.username}}",
                 }));
                 messageInput.value = '';
             });
@@ -116,89 +116,11 @@
                 <p>${data.message}</p>
             `;
             chatContainer.appendChild(messageElement);
-            location.reload();
         };
 
 
       
     </script>
-
-    <!--<script>
-        var currentUrl = window.location;
-        var user = document.getElementById('user').getAttribute('data-user');
-        var chatContainer = $(".chat-container");
-        var chatId = document.getElementById('title').getAttribute('data-chat-id');
-        const messageForm = document.getElementById('message-form');
-        const messageInput = document.getElementById('input');  
-
-        function fetchAndUpdateMessages() {
-            $.ajax({
-                type: 'GET',
-                url: currentUrl,
-                success: function (response) {
-                    var chatContainer = $(".chat-container");
-                    chatContainer.empty();
-                    for (var i = 0; i < response.messages.length; i++) {
-                        var message = response.messages[i];
-                        var temp = "<div class='messages " + (message.user === user ? 'messages-sent' : 'messages-received') + "' data-sender='" + message.user + "'>" +
-                            "<span class='message-sender'>" + message.user + "</span>" +
-                            "<p>" + message.value + "</p>" +
-                            "<p>" + message.date + "</p>" +
-                            "</div>";
-                        chatContainer.append(temp); // Append new message
-                    }
-                },
-                error: function (response) {
-                    console.error('An error occurred');
-                }
-            });
-        }
-        // Set an interval to fetch and update messages every 1 second (1000 milliseconds)
-        setInterval(fetchAndUpdateMessages, 1000);
-
-        $(document).on('submit', '#message-form', function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: currentUrl,  // Update the URL to match your view's URL
-                data: {
-                    content: $('#message').val(),
-                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-                },
-                success: function (data) {
-                    if (data.success) {
-                        // Handle success (e.g., clear the form, update the chat interface)
-                        $('#message').val('');
-                    } else {
-                        // Handle form validation errors
-                        console.error(data.errors);
-                    }
-                },
-                error: function (xhr, errmsg, err) {
-                    // Handle AJAX error
-                    console.error(errmsg);
-                }
-            });
-        });
-
-        // Optional: Handle form submission when the user presses Enter in the textarea
-        $('#message').keydown(function (event) {
-            if (event.keyCode === 13) { // Check for Enter key (key code 13)
-                event.preventDefault();
-                $('#send-button').click(); // Trigger the Send button click event
-            }
-        });
-
-        document.querySelector('#submit').onclick = function (e) {
-        const messageInputDom = document.querySelector('#input');
-        const message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
-            'message': message,
-            'username': user_username,
-        }));
-        messageInputDom.value = '';
-        };
-    </script>-->
 </body>
 </html>
 {% endblock content %}

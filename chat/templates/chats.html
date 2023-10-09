@@ -53,7 +53,7 @@
             // Dynamically load the content from "conversation.html" using AJAX
             // For simplicity, we'll use a placeholder message
             const currentUrl = window.location.href;
-            const newUrl = `${currentUrl}conversation/${chatId}`;
+            const newUrl = `${currentUrl}${chatId}`;
             window.location.href = newUrl;
         });
     });

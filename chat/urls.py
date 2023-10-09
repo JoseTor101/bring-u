@@ -3,6 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.Chats, name='chats'),
-    path('conversation/<int:id_chat>/', views.Conversation, name='conversation'),
+    path('<int:id_chat>', views.Conversation, name='conversation'),
 ]
 
