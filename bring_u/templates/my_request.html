@@ -1,12 +1,23 @@
-{% extends "base.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% extends "base.html" %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'my_request.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
     <div class="container mt-5"></div>
         <div class="row">
             <div class="col" >
-                <h2>IMAGEN</h2>
+                <img class="imagen" src="media\gettyimages-1287152859.jpg" alt="">
             </div>
             <div class="col-8" >
-                <h2>SOLICITUD PERSONALIZADA</h2>
+                <h2 class="hdos">SOLICITUD PERSONALIZADA</h2>
                 <form  method="POST" action="/my_request" class="row g-3" id="personalizedRequest" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
@@ -46,8 +57,10 @@
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
-                </form>
-                
+                </form> 
             </div>
         </div>
-{% endblock %}
+    {% endblock %}
+</body>
+</html>
+
