@@ -67,14 +67,112 @@
         {% endfor %}
     </div>
 
-    <div class="message-input-container">
+    <!--<div class="message-input-container">
         <form id="message-form" method="POST">
             {% csrf_token %}
             <textarea id="message" name="content" placeholder="Type your message..."></textarea>
             <button type="submit" id="send-button" >Send</button>
         </form>
+    </div>-->
+    <div class="message-container">
+        <textarea id="message" name="content" placeholder="Type your message..."></textarea>
+        <button type="submit" id="send-button" >Send</button>
     </div>
 
+<script>
+    const id_chat = "{{ chatId }}"
+    const chatSocket = new WebSocket(`wss://${window.location.host}/ws/chat/${id_chat}/`);
+    const user = "{{ request.user.username }}"  
+    
+    console.log(chatSocket);
+
+    chatSocket.onopen = function (e) {
+        console.log("The connection was set up successfully!");
+    };
+
+    chatSocket.onclose = function (e) {
+    console.log("The connection was closed!");
+    };
+
+    document.querySelector("#message").focus();
+
+    document.querySelector("#message").onkeyup = function (e) {
+    if (e.keyCode == 13) {
+        document.querySelector("#send-button").click();
+    }
+    };
+
+    document.querySelector("#send-button").onclick = function (e) {
+    // Check if the WebSocket is open before sending a message.
+    if (chatSocket.readyState === WebSocket.OPEN) {
+        var messageInput = document.querySelector("#message").value;
+        chatSocket.send(
+        JSON.stringify({
+            username: user,
+            message: messageInput,
+            chat_id: "{{ chatId }}"
+        })
+        );
+    } else {
+        console.log("WebSocket is not in the OPEN state.");
+    }
+    };
+
+    chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    var messageClass = data.user === user ? "messages-sent" : "messages-received";
+    var messageElement = document.createElement("div");
+    messageElement.className = `messages ${messageClass}`;
+    messageElement.innerHTML = `
+        <span class="message-sender">${data.username}</span>
+        <p>${data.message}</p>
+    `;
+    document.querySelector("#send-button").value = "";
+    chatContainer.appendChild(messageElement);
+    };
+
+</script>
+
+<!--<script>
+<script>
+    var user = "{{ request.user.username }}";
+    var chatId = "{{ chat.id_chat }}";
+    const chatContainer = document.querySelector(".chat-container");
+    const messageInput = document.getElementById('message');
+    const sendMessage = document.getElementById('send-button');
+
+    const chatSocket = new WebSocket(
+        'wss://' + window.location.host +`/ws/chat/${chatId}/`);
+
+    // Event listener for form submission
+    sendMessage.addEventListener('click', function (e) {
+        e.preventDefault();
+        const message = messageInput.value;
+        
+        // Check if the WebSocket is in the OPEN state before sending
+        if (chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': user,
+            }));
+            messageInput.value = '';
+        } else {
+            console.error('WebSocket connection is not open.');
+        }
+    });
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        const messageClass = data.user === user ? 'messages-sent' : 'messages-received';
+        const messageElement = document.createElement('div');
+        messageElement.className = `messages ${messageClass}`;
+        messageElement.innerHTML = `
+            <span class="message-sender">${data.user}</span>
+            <p>${data.message}</p>
+        `;
+        chatContainer.appendChild(messageElement);
+    };
+</script>
     <script>
         var currentUrl = window.location;
         var user = document.getElementById('user').getAttribute('data-user');
@@ -117,10 +215,10 @@
             `;
             chatContainer.appendChild(messageElement);
         };
-
-
       
-    </script>
+    </script>-->
+
+   
 </body>
 </html>
 {% endblock content %}
