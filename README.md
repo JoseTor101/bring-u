@@ -18,10 +18,12 @@ Before starting, make sure to install the following packages using `pip`:
 ### Starting the ASGI Server
 
 To start the ASGI server, use the following commands:
-
+ 
+- Offline: `daphne config.asgi:application`
+- Local network: `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
+or 
 - `daphne chat.asgi:application`
 - `daphne -u /tmp/daphne.sock chat.asgi:application` (Linux only)
-- `daphne -u 0.0.0.0:8000 chat.asgi:application`
 - `daphne -u 0.0.0.0:8000 chat.asgi:application`
 
 ### Deployment
