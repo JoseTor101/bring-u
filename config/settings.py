@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-t45gl3e+n1v9-(8@$6&$p8d1)(uh25knwxz1pz5k101d+s1h5e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['127.0.0.1','192.168.43.211']
+ALLOWED_HOSTS = ['192.168.49.173']
 
 
 # Application definition
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bring_u',
     'accounts',
+    'chat',
 ]
 
 MIDDLEWARE = [
