@@ -15,6 +15,7 @@ urlpatterns = [
     path('available_orders', bringuViews.available_orders),
     path('accounts/', include('accounts.urls')),
     path('chat/', include('chat.urls')),
+    path('addmenu/', bringuViews.addmenu),
 ]
 
 
