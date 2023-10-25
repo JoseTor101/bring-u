@@ -180,8 +180,6 @@ def available_orders(request):
 
     #Tomar ordenes 
     if request.method == "POST":
-
-<<<<<<< HEAD
             # Check if the user already has an ongoing delivery
             try:
                 current_delivery = Delivery.objects.filter(fk_id_delivery_man=user).latest('time')
@@ -213,12 +211,9 @@ def available_orders(request):
                     return redirect('/')
 
     return render(request, "available_orders.html", context)
-=======
-    return render(request, 'my_request.html')
 
 def addmenu(request):
     if request.method == 'POST':
         cropped_img = request.POST.get('image-data')
         read_image_from_dataUri(cropped_img)
     return render(request, 'addmenu.html')
->>>>>>> cris-branch
