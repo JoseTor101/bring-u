@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .models import Business,Product, Request
 from accounts.models import UserProfile
 import json
+from AI.AI import read_image_from_dataUri
 #manejo de imagenes
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -118,3 +119,9 @@ def my_request(request):
 
 
     return render(request, 'my_request.html')
+
+def addmenu(request):
+    if request.method == 'POST':
+        cropped_img = request.POST.get('image-data')
+        read_image_from_dataUri(cropped_img)
+    return render(request, 'addmenu.html')
