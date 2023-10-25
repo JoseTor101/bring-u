@@ -26,8 +26,9 @@ SECRET_KEY = 'django-insecure-t45gl3e+n1v9-(8@$6&$p8d1)(uh25knwxz1pz5k101d+s1h5e
 DEBUG = True
 
 #ALLOWED_HOSTS = ['127.0.0.1','192.168.43.211']
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.49.173', '10.164.7.131']
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -122,6 +123,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "bring_u/templates/static"), 
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

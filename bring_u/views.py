@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .models import Business,Product, Request, Delivery
 from accounts.models import UserProfile
 import json
+from AI.AI import read_image_from_dataUri
 #manejo de imagenes
 from django.core.files.uploadedfile import SimpleUploadedFile
 #Campo requerido para ver la vista
@@ -179,7 +180,6 @@ def available_orders(request):
 
     #Tomar ordenes 
     if request.method == "POST":
-
             # Check if the user already has an ongoing delivery
             try:
                 current_delivery = Delivery.objects.filter(fk_id_delivery_man=user).latest('time')
@@ -211,3 +211,9 @@ def available_orders(request):
                     return redirect('/')
 
     return render(request, "available_orders.html", context)
+
+def addmenu(request):
+    if request.method == 'POST':
+        cropped_img = request.POST.get('image-data')
+        read_image_from_dataUri(cropped_img)
+    return render(request, 'addmenu.html')

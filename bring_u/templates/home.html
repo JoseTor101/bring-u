@@ -1,6 +1,98 @@
-{% extends "base.html" %}
-    {% block content %}
-        <div class="container mt-5">
-            <h1>BRING-U homepage</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% extends "base.html" %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+    <title>BRING-U</title>
+</head>
+<body>
+  {% block content %}
+  <div class="container mt-5">
+      <h1 class="bringu">BRING-U homepage</h1>
+  </div>
+  <br>
+  <br>
+  <div class="barra-de-busqueda">
+      <div class="col-md-6">
+          <form class="d-flex" action="">
+              <input class="form-control me-2" name="searchBusiness" type="text"  placeholder="Buscar" aria-label="Search">
+              <button class="btn btn-primary" type="submit">Buscar</button>
+            </form>
+          </div>
         </div>
-{% endblock %}  
+  </div>
+  <br>
+  <br>
+  <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="../../media/promfrisby.jpg" class="img-carousel" alt="Promo Frisby">
+        </div>
+        <div class="carousel-item">
+          <img src="media\zyro-image.jpg" class="img-carousel" alt="Promo Juan Valdez">
+        </div>
+        <div class="carousel-item">
+          <img src="../../media/Dunkindonuts.jpg" class="img-carousel" alt="Promo Dunkin Donuts">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+  </div>
+
+  <div class="servicios-container">
+    <a href="/my_request">
+      <img class="imagenservicio" src="media\CustomOrder.png" alt="Imagen">
+    </a>
+   
+    <a href="/business"> 
+      <img class="imagenservicio" src="media\Business.png" alt="Imagen">
+    </a>
+  </div>
+  
+  <div class="cards-container">
+    <div class="card1">
+      <img src="media\zyro-image1.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">#UneteATuCombo</h5>
+        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione deleniti voluptatum repudiandae expedita sapiente, enim consectetur, ullam amet quis, in molestias blanditiis earum similique? Qui dolorem illum eius fuga saepe.</p>
+      </div>
+      <div class="card-body">
+        <a href="#" class="card-link">Ver Más...</a>
+      </div>
+    </div>
+  
+    <div class="card2">
+      <img src="media\dfbbd-editable-27-03.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Comparte en casa</h5>
+        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione deleniti voluptatum repudiandae expedita sapiente, enim consectetur, ullam amet quis, in molestias blanditiis earum similique? Qui dolorem illum eius fuga saepe.</p>
+      </div>
+      <div class="card-body">
+        <a href="#" class="card-link">Ver Más...</a>
+      </div>
+    </div>
+  
+    <div class="card3">
+      <img src="media\RavxkYrKkHGBCYJ4b-x-750.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Comparte en casa</h5>
+        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione deleniti voluptatum repudiandae expedita sapiente, enim consectetur, ullam amet quis, in molestias blanditiis earum similique? Qui dolorem illum eius fuga saepe.</p>
+      </div>
+      <div class="card-body">
+        <a href="#" class="card-link">Ver Más...</a>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+</body>
+  
