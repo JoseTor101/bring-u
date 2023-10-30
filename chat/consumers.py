@@ -8,8 +8,50 @@ from asgiref.sync import async_to_sync
 
 class ChatSystem(AsyncWebsocketConsumer):
     async def connect(self):
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f"chat_{self.room_name}"
+
+        await self.channel_layer.group_add(
+            self.room_name,
+            self.room_group_name
+        )
+
         await self.accept()
-    """async def connect(self):
+
+        #return await super().connect()
+
+    async def disconnect(self,close_code):
+        await self.channel_layer.discard(
+            self.room_name, 
+            self.room_group_name
+        )
+
+    async def receive(self, text_data=None, bytes_data=None):
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            #Messages details
+            {
+                'type': 'chat_message',
+                'message':message,
+            }
+        )
+    
+    async def chat_message(self,event):
+        message = event['message']
+
+        await self.send(text_data=json.dumps({
+            'message':message
+        }))
+
+
+"""
+class ChatSystem(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+    async def connect(self):
         self.id_chat = self.scope["url_route"]["kwargs"]["id_chat"]
         self.group_name = f"chat_{self.id_chat}"
 
@@ -17,7 +59,7 @@ class ChatSystem(AsyncWebsocketConsumer):
             self.group_name, 
             self.channel_name)
 
-        await self.accept()"""
+        await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
@@ -50,3 +92,4 @@ class ChatSystem(AsyncWebsocketConsumer):
         print("IMPRIMAAAAAAAAAAAAAA")
         print(self, " ", self.user, " ", self.message, " ", self.id_chat)
         Message.objects.create(user=user, content=message, fk_id_chat=chat_id)
+"""

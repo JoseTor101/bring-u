@@ -32,6 +32,10 @@ To deploy the project, follow these steps:
 
 1. Collect static files: `python manage.py collectstatic`
 2. Run the ASGI server: `daphne -u 0.0.0.0:8000 chat.asgi:application`
+daphne -b 0.0.0.0 -p 8000 config.asgi:application
+daphne config.asgi:application
+
+
 3. Access the application at `http://your-server-ip:8000` or the appropriate URL.
 
 If not pretending to use realtime communication(Chat system), just use:

@@ -26,8 +26,10 @@ SECRET_KEY = 'django-insecure-t45gl3e+n1v9-(8@$6&$p8d1)(uh25knwxz1pz5k101d+s1h5e
 DEBUG = True
 
 #ALLOWED_HOSTS = ['127.0.0.1','192.168.43.211']
+
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 
+#ALLOWED_HOSTS = ['192.168.43.211']
 ALLOWED_HOSTS = []
 
 
@@ -43,9 +45,11 @@ INSTALLED_APPS = [
     'bring_u',
     'accounts',
     'chat',
+    'channels',
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,10 +77,33 @@ TEMPLATES = [
     },
 ]
 
-
+"""
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.wsgi.application'
+"""
+ASGI_APPLICATION = 'chat.routing.application'
+# !!! Cuando vayamos a desplegarlo esto cambia a algo similar a lo comentado
 
 
+
+CHANNEL_LAYERS= {
+    "default":{
+        "BACKEND":"channels.layers.InMemoryChannelLayer"
+    }
+}
+
+"""
+https://stackoverflow.com/questions/64227425/connectionrefusederror-errno-10061-connect-call-failed-127-0-0-1-6379-we
+
+CHANNEL_LAYER= {
+    "default":{
+        "BACKEND":"channels_redis.core.RedisChannelLayer",
+        "CONFIG":{
+            "hosts": [("127.0.0.1", 6379)]
+        }
+    }
+} """
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -136,3 +163,10 @@ MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = "accounts.UserProfile"  
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = "/static/"
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# DONT USE DEBUG ON PRODUCTION 
+DEBUG = True

@@ -55,7 +55,7 @@
 </style>
 
 <body>
-    <h1>Conversacion {{ chat.id_chat }}</h1>
+    <!--<h1>Conversacion {{ chat.id_chat }}</h1>
     <span id="user" data-user="{{ user }}"></span>
     <div class="chat-container" id="chat-container">
         {% for message in messages %}
@@ -69,76 +69,73 @@
 
     <div class="message-input-container">
         <form id="message-form" method="POST">
-            {% csrf_token %}
+            {% csrf_token %}}
             <textarea id="message" name="content" placeholder="Type your message..."></textarea>
             <button type="submit" id="send-button" >Send</button>
         </form>
+    </div>-->
+
+    <div id="chat-messages">
+        {% for message in messages %}
+        <div class="messages {% if message.sender == user %}messages-sent{% else %}messages-received{% endif %}" data-sender="{{ message.sender }}">
+            <span class="message-sender">{{ message.sender }}</span>
+            <p>{{ message.content }}</p>
+            <p>{{ message.timestamp }}</p>
+        </div>
+        {% endfor %}
+        <!-- Aquí se mostrarán los mensajes del chat -->
     </div>
 
+    <input id="chat-input" type="text" placeholder="Escribe un mensaje..." />
+    <button id="send-button" >Send</button>
+
     <script>
-        var currentUrl = window.location.href;
-        var user = document.getElementById('user').getAttribute('data-user');
-        var chatContainer = $(".chat-container");
+        document.addEventListener("DOMContentLoaded", function () {
+                const chatInput = document.getElementById("chat-input");
+                const sendButton = document.getElementById("send-button");
+                const chatMessages = document.getElementById("chat-messages");
 
+                const socket = new WebSocket(
+                    "ws://" + window.location.host + "/ws/chat/{{ chat.id_chat }}"
+                );
 
-        function fetchAndUpdateMessages() {
-            $.ajax({
-                type: 'GET',
-                url: currentUrl,
-                success: function (response) {
-                    var chatContainer = $(".chat-container");
-                    chatContainer.empty();
-                    for (var i = 0; i < response.messages.length; i++) {
-                        var message = response.messages[i];
-                        var temp = "<div class='messages " + (message.user === user ? 'messages-sent' : 'messages-received') + "' data-sender='" + message.user + "'>" +
-                            "<span class='message-sender'>" + message.user + "</span>" +
-                            "<p>" + message.value + "</p>" +
-                            "<p>" + message.date + "</p>" +
-                            "</div>";
-                        chatContainer.append(temp); // Append new message
-                    }
-                },
-                error: function (response) {
-                    console.error('An error occurred');
-                }
-            });
-        }
-        // Set an interval to fetch and update messages every 1 second (1000 milliseconds)
-        setInterval(fetchAndUpdateMessages, 1000);
+                console.log(socket);
+                console.log(window.location.host);
 
-        $(document).on('submit', '#message-form', function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: currentUrl,  // Update the URL to match your view's URL
-                data: {
-                    content: $('#message').val(),
-                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-                },
-                success: function (data) {
-                    if (data.success) {
-                        // Handle success (e.g., clear the form, update the chat interface)
-                        $('#message').val('');
+                socket.onopen = function (event) {
+                    console.log("Conectado al servidor WebSocket");
+
+                    // You can enable the send button after the WebSocket connection is open.
+                    sendButton.disabled = false;
+                };
+
+                socket.onmessage = function (event) {
+                    const messageData = JSON.parse(event.data);
+                    const messageElement = document.createElement("p");
+                    messageElement.innerText = messageData.message;
+                    chatMessages.appendChild(messageElement);
+                };
+
+                socket.onclose = function (event) {
+                    console.log("Conexión WebSocket cerrada");
+
+                    // You may want to disable the send button or handle reconnection here.
+                    sendButton.disabled = true;
+                };
+
+                sendButton.addEventListener("click", function () {
+                    if (socket.readyState === WebSocket.OPEN) {
+                        const message = chatInput.value;
+                        socket.send(JSON.stringify({ message: message }));
+                        chatInput.value = "";
                     } else {
-                        // Handle form validation errors
-                        console.error(data.errors);
+                        console.log("WebSocket is not in OPEN state. Cannot send message.");
                     }
-                },
-                error: function (xhr, errmsg, err) {
-                    // Handle AJAX error
-                    console.error(errmsg);
-                }
+                });
             });
-        });
 
-        // Optional: Handle form submission when the user presses Enter in the textarea
-        $('#message').keydown(function (event) {
-            if (event.keyCode === 13) { // Check for Enter key (key code 13)
-                event.preventDefault();
-                $('#send-button').click(); // Trigger the Send button click event
-            }
-        });
     </script>
+
 </body>
 </html>
 {% endblock content %}

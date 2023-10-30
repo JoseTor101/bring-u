@@ -65,6 +65,4 @@ def Conversation(request, id_chat):
         return JsonResponse({'success': True})
 
 
-    
-
     return render(request, 'conversation.html',context)
