@@ -4,39 +4,54 @@
 
 <style>
     body {
-        margin: 0; /* Remove margin to avoid unexpected scrolling behavior */
-        padding: 0; /* Remove padding to avoid unexpected scrolling behavior */
+        margin: 0;
+        /* Remove margin to avoid unexpected scrolling behavior */
+        padding: 0;
+        /* Remove padding to avoid unexpected scrolling behavior */
     }
+
     .chat-container {
-        height: auto; /* Adjust the maximum height as needed */
+        height: auto;
+        /* Adjust the maximum height as needed */
         display: flex;
         flex-direction: column;
-        justify-content: flex-start; /* Align messages to the bottom (right-aligned sent messages) */
+        justify-content: flex-start;
+        /* Align messages to the bottom (right-aligned sent messages) */
     }
+
     .messages {
         border-radius: 10px;
         padding: 10px;
         margin: 10px;
-        max-width: 70%; /* Adjust as needed */
+        max-width: 70%;
+        /* Adjust as needed */
     }
+
     .messages-sent {
-        background-color: #cfe2ff; /* Example background color for sent messages */
+        background-color: #cfe2ff;
+        /* Example background color for sent messages */
         align-self: flex-end;
     }
+
     .messages-received {
-        background-color: #f0f0f0; /* Example background color for received messages */
+        background-color: #f0f0f0;
+        /* Example background color for received messages */
         align-self: flex-start;
     }
+
     .message-sender {
         font-weight: bold;
     }
+
     .message-input-container {
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 10px;
-        background-color: #f0f0f0; /* Background color for the input container */
+        background-color: #f0f0f0;
+        /* Background color for the input container */
     }
+
     .message-input {
         flex-grow: 1;
         border: 1px solid #ccc;
@@ -44,8 +59,10 @@
         padding: 5px;
         margin-right: 10px;
     }
+
     .send-button {
-        background-color: #007bff; /* Example background color for the send button */
+        background-color: #007bff;
+        /* Example background color for the send button */
         color: #fff;
         border: none;
         border-radius: 5px;
@@ -55,87 +72,76 @@
 </style>
 
 <body>
-    <!--<h1>Conversacion {{ chat.id_chat }}</h1>
-    <span id="user" data-user="{{ user }}"></span>
-    <div class="chat-container" id="chat-container">
-        {% for message in messages %}
-        <div class="messages {% if message.sender == user %}messages-sent{% else %}messages-received{% endif %}" data-sender="{{ message.sender }}">
-            <span class="message-sender">{{ message.sender }}</span>
-            <p>{{ message.content }}</p>
-            <p>{{ message.timestamp }}</p>
+    <div id="container">
+        <div class="chat-container" id="chat-container">
+            {% for message in messages %}
+            <div class="messages {% if message.sender == user %}messages-sent{% else %}messages-received{% endif %}"
+                data-sender="{{ message.sender }}">
+                <span class="message-sender">{{ message.sender }}</span>
+                <p>{{ message.content }}</p>
+                <p>{{ message.timestamp }}</p>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-
-    <div class="message-input-container">
-        <form id="message-form" method="POST">
-            {% csrf_token %}}
-            <textarea id="message" name="content" placeholder="Type your message..."></textarea>
-            <button type="submit" id="send-button" >Send</button>
+        <form id="chat-form">
+            <div class="form-group">
+                <input class="form-control" placeholder="Enter text here" id="input" type="text"></br>
+            </div>
+            <input class="btn btn-primary btn-lg btn-block" id="submit" type="button" value="Send">
         </form>
-    </div>-->
-
-    <div id="chat-messages">
-        {% for message in messages %}
-        <div class="messages {% if message.sender == user %}messages-sent{% else %}messages-received{% endif %}" data-sender="{{ message.sender }}">
-            <span class="message-sender">{{ message.sender }}</span>
-            <p>{{ message.content }}</p>
-            <p>{{ message.timestamp }}</p>
-        </div>
-        {% endfor %}
-        <!-- Aquí se mostrarán los mensajes del chat -->
     </div>
 
-    <input id="chat-input" type="text" placeholder="Escribe un mensaje..." />
-    <button id="send-button" >Send</button>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-                const chatInput = document.getElementById("chat-input");
-                const sendButton = document.getElementById("send-button");
-                const chatMessages = document.getElementById("chat-messages");
+        const username = '{{ user }}';
+        const chatContainer = document.querySelector('#chat-container');
+        const chatForm = document.querySelector('#chat-form'); 
+        
+        chatForm.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission action
 
-                const socket = new WebSocket(
-                    "ws://" + window.location.host + "/ws/chat/{{ chat.id_chat }}"
-                );
+            const messageInputDom = document.querySelector('#input');
+            const message = messageInputDom.value;
 
-                console.log(socket);
-                console.log(window.location.host);
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': username,
+            }));
+            messageInputDom.value = '';
+        });
 
-                socket.onopen = function (event) {
-                    console.log("Conectado al servidor WebSocket");
+        document.querySelector('#submit').onclick = function (e) {
+            const messageInputDom = document.querySelector('#input');
+            const message = messageInputDom.value;
 
-                    // You can enable the send button after the WebSocket connection is open.
-                    sendButton.disabled = false;
-                };
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': username,
+            }));
+            messageInputDom.value = '';
+        };
 
-                socket.onmessage = function (event) {
-                    const messageData = JSON.parse(event.data);
-                    const messageElement = document.createElement("p");
-                    messageElement.innerText = messageData.message;
-                    chatMessages.appendChild(messageElement);
-                };
+        const chatSocket = new WebSocket(
+            "ws://" + window.location.host + "/ws/chat/{{ chat.id_chat }}"
+        );
 
-                socket.onclose = function (event) {
-                    console.log("Conexión WebSocket cerrada");
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const messageClass = data.username === username ? 'messages-sent' : 'messages-received';
+            const messageElement = document.createElement('div');
+            messageElement.className = `messages ${messageClass}`;
+            messageElement.innerHTML = `
+                <span class="message-sender">${data.username}</span>
+                <p>${data.message}</p>
+                <p>${data.timestamp}</p>
+            `;
+            console.log(data);
+            chatContainer.appendChild(messageElement);
+        };
 
-                    // You may want to disable the send button or handle reconnection here.
-                    sendButton.disabled = true;
-                };
-
-                sendButton.addEventListener("click", function () {
-                    if (socket.readyState === WebSocket.OPEN) {
-                        const message = chatInput.value;
-                        socket.send(JSON.stringify({ message: message }));
-                        chatInput.value = "";
-                    } else {
-                        console.log("WebSocket is not in OPEN state. Cannot send message.");
-                    }
-                });
-            });
 
     </script>
-
 </body>
+
 </html>
 {% endblock content %}

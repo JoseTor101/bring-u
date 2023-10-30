@@ -3,8 +3,10 @@ from .models import Chat, Message  # Import your models
 from accounts.models import UserProfile  # Import your UserProfile model
 from django.utils import timezone
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 import json
 
+@login_required
 def Chats(request):
     user = request.user
     current_user = UserProfile.objects.get(username=user)
@@ -18,6 +20,8 @@ def Chats(request):
     }
     return render(request, 'chats.html', context)
 
+
+@login_required
 def Conversation(request, id_chat):
     user = request.user
     current_user = UserProfile.objects.get(username=user)
@@ -64,5 +68,3 @@ def Conversation(request, id_chat):
 
         return JsonResponse({'success': True})
 
-
-    return render(request, 'conversation.html',context)

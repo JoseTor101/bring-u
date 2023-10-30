@@ -17,46 +17,51 @@ def home(request):
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
     return render(request, 'home.html', {'is_delivering': is_delivering})
 
+@login_required
 def business(request):
-    user = request.user
-    is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
+    try: 
+        user = request.user
+        is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
 
-    searchBusiness= request.GET.get('searchBusiness')
-    if searchBusiness:
-        businesses = Business.objects.filter(name__icontains = searchBusiness)
-    else:
-        businesses =  Business.objects.all()
-        searchBusiness = "" 
+        searchBusiness= request.GET.get('searchBusiness')
+        if searchBusiness:
+            businesses = Business.objects.filter(name__icontains = searchBusiness)
+        else:
+            businesses =  Business.objects.all()
+            searchBusiness = "" 
 
-    
-    businessesDict = {
-        'businesses': businesses,
-        'searchRestaurant':searchBusiness,
-        'is_delivering':is_delivering
-    } 
-
-    #CREACION DE ORDEN
-    if request.method == "POST":
-        form_data = request.POST
-        user_id = UserProfile.objects.get(id=user.id)
-        product = Product.objects.get(id_product=form_data['product_id'])
-        business = product.fk_id_business.name
         
-        Request.objects.create(
-                fk_id_user=user_id,
-                fk_id_product=product,
-                business_name=business,
-                name=form_data['product_name'],
-                desc=form_data['product_desc'],
-                price=form_data['product_price'],
-                pick_up_location=form_data['business_name'],
-                delivery_location=form_data['delivery_location'],
-                desc_delivery=form_data['desc_delivery'],
-            )
+        businessesDict = {
+            'businesses': businesses,
+            'searchRestaurant':searchBusiness,
+            'is_delivering':is_delivering
+        } 
 
-        return redirect('/profile')
+        #CREACION DE ORDEN
+        if request.method == "POST":
+            form_data = request.POST
+            user_id = UserProfile.objects.get(id=user.id)
+            product = Product.objects.get(id_product=form_data['product_id'])
+            business = product.fk_id_business.name
+            
+            Request.objects.create(
+                    fk_id_user=user_id,
+                    fk_id_product=product,
+                    business_name=business,
+                    name=form_data['product_name'],
+                    desc=form_data['product_desc'],
+                    price=form_data['product_price'],
+                    pick_up_location=form_data['business_name'],
+                    delivery_location=form_data['delivery_location'],
+                    desc_delivery=form_data['desc_delivery'],
+                )
 
-    return render(request, 'business.html', businessesDict  )
+            return redirect('/profile')
+
+        return render(request, 'business.html', businessesDict  )
+    except:
+        return redirect('/not_found')
+
 @login_required
 def product(request, id_business):
     business = get_object_or_404(Business, pk=id_business)
@@ -124,6 +129,7 @@ def profile(request):
     
     return render(request, 'profile.html', context)
 
+@login_required
 #SELECCIONAR SI QUIERES UNA PETICION PERSONALIZADA O DE RESTAURANTES
 def orders(request):
     user = request.user
@@ -134,7 +140,7 @@ def orders(request):
     return render(request, 'request.html', context)
 
 #CREAR SOLICITUD PERSONALIZADA EN "my_request.html"
-
+@login_required
 def my_request(request):
     user = request.user
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
@@ -166,6 +172,7 @@ def my_request(request):
     return render(request, 'my_request.html', context)
 
 #VER ÓRDENES QUE SE PUEDEN TOMAR EN "available_orders.html"
+@login_required
 @is_service_prov_required
 def available_orders(request):
     user= request.user
@@ -212,6 +219,7 @@ def available_orders(request):
 
     return render(request, "available_orders.html", context)
 
+@login_required
 def addmenu(request):
     if request.method == 'POST':
         cropped_img = request.POST.get('image-data')

@@ -15,19 +15,3 @@ application = ProtocolTypeRouter({
     "websocket": AuthMiddlewareStack(
         URLRouter(websocket_urlpatterns)),
 })
-
-"""
-websocket_urlpatterns=[
-                    re_path(
-                       r'ws/chat/<int:id_chat>/$', consumers.ChatSystem.as_asgi()
-                    ),
-                ]
-
-
-application = ProtocolTypeRouter({
-    "websocket": URLRouter([
-        re_path(r"ws/chat/(?P<id_chat>\d+)/$", consumers.ChatSystem.as_asgi())
-    ]),
-})
-"""
-
