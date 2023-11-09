@@ -6,37 +6,31 @@ This README provides an overview of the Bring-U project, including installation 
 
 ### Installed Apps
 
-Before starting, make sure to install the following packages using `pip`:
+Before starting,  make sure you have installed `python`, `pip`, `django`and `git`:
 
-- `channels`: Install using `pip install channels`.
-- `daphne`: Install using `pip install daphne`.
- - Modify the `channels` installation with: `python -m pip install -U channels["daphne"]`.
-- `twisted[http2,tls]`: Install using `pip install twisted[http2,tls]`.
-- `whitenoise`: Install for serving static files using `pip install whitenoise`.
-- `pytesseract`: Install using `pip install pytesseract`.
-- `openai`: Install using  `pip install openai`.
-### Starting the ASGI Server
+In linux follow this steps:
+1. `sudo apt install -y git`
+2. `sudo apt install -y python3-pip`
+3. `sudo su pip3 install django`
+4. `python3 -m pip install --upgrade pip`
+5. Install requirements: `pip install -r requirements.txt`
 
-To start the ASGI server, use the following commands:
- 
-- Offline: `daphne config.asgi:application`
-- Local network: `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
-or 
-- `daphne chat.asgi:application`
-- `daphne -u /tmp/daphne.sock chat.asgi:application` (Linux only)
-- `daphne -u 0.0.0.0:8000 chat.asgi:application`
+For other OS look for custom tutorials
+
+### Set project
+
+1. Make sure to clone the repository using: `git clone https://github.com/JoseTor101/bring-u`
+2. Move to root folder: `cd BRING_U_PROJECT`
+3. Run migrations: `python3 manage.py makemigrations`
+4. `python3 manage.py migrate`
 
 ### Deployment
 
 To deploy the project, follow these steps:
 
 1. Collect static files: `python manage.py collectstatic`
-2. Run the ASGI server: `daphne -u 0.0.0.0:8000 chat.asgi:application`
-daphne -b 0.0.0.0 -p 8000 config.asgi:application
-daphne config.asgi:application
-
-
-3. Access the application at `http://your-server-ip:8000` or the appropriate URL.
+2. Run the ASGI server: `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
+3. Access the application at `GCP - custom URL` or the appropriate URL.
 
 If not pretending to use realtime communication(Chat system), just use:
 1. Execute in root folder: `python manage.py runserver`
