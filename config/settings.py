@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bring_u',
     'accounts',
     'chat',
+    'notifications',
     'channels',
 ]
 

@@ -43,3 +43,5 @@ python manage.py collectstatic  --- Coleccionar archivos estáticos
 daphne -u 0.0.0.0:8000 chat.asgi:application --- Correr el servidor asgi
 daphne chat.asgi:application
 
+We must install Redis
+https://github.com/tporadowski/redis/releases

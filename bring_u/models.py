@@ -42,3 +42,4 @@ class Delivery(models.Model):
     fk_id_client = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='client_deliveries', default=None)
     fk_id_delivery_man = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='delivery_man_deliveries')
     time = models.TimeField(auto_now=True)
+    finished = models.BooleanField(default=False)

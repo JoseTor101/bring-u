@@ -10,6 +10,7 @@
                             <div class="card-body">
                                 <!--We use " | title  " to capitalize first letter of all strings-->
                                 {% if order.business_name %}
+                                {{ order.id_request  }}
                                 <h5 class="card-title">Comprar en: {{ order.business_name|title }}</h5>
                                 {%endif%}
                                 <h5 class="card-title">Entregar en: {{ order.delivery_location|title}}</h5>

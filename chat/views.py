@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 import json
+from .decorator import is_chat_member
 
 @login_required
 def Chats(request):
@@ -22,6 +23,7 @@ def Chats(request):
 
 
 @login_required
+@is_chat_member
 def Conversation(request, id_chat):
     user = request.user
     current_user = UserProfile.objects.get(username=user)
@@ -35,7 +37,7 @@ def Conversation(request, id_chat):
         }
 
     if request.method == 'GET':
-        if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        #if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             # Check if it's an AJAX request
             messages_list = [
                 {
@@ -45,13 +47,12 @@ def Conversation(request, id_chat):
                 }
                 for message in messages
             ]
-            return JsonResponse({'messages': messages_list})
-        else:
+           # return JsonResponse({'messages': messages_list})
+        #else:
             # For regular page request, return the HTML page
             return render(request, 'conversation.html', context)
         
-    if request.method == 'POST':
-        print("hola")
+    """if request.method == 'POST':
         content = request.POST.get('content')
 
         # Create a new Message instance
@@ -65,6 +66,6 @@ def Conversation(request, id_chat):
         # Update the last_update field of the associated chat
         chat.last_update = timezone.now()
         chat.save()
-
-        return JsonResponse({'success': True})
+       
+        return JsonResponse({'success': True}) """
 

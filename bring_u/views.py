@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .models import Business,Product, Request, Delivery
+from chat.models import Chat
 from accounts.models import UserProfile
 import json
 from AI.AI import read_image_from_dataUri
@@ -9,13 +10,21 @@ from AI.AI import read_image_from_dataUri
 from django.core.files.uploadedfile import SimpleUploadedFile
 #Campo requerido para ver la vista
 from .decorators import is_service_prov_required
+from notifications.models import Notification
+
 
 # Create your views here.
 def home(request):
     user = request.user
-    #Verify if user is delivering 
+    unread_notifications = Notification.objects.filter(is_read=False)
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
-    return render(request, 'home.html', {'is_delivering': is_delivering})
+    
+    context = {
+        'is_delivering': is_delivering,
+        'user':user,
+        'unread_notifications': unread_notifications,
+    }
+    return render(request, 'home.html', context)
 
 @login_required
 def business(request):
@@ -74,12 +83,12 @@ def profile(request):
     user = request.user
     user_profile = UserProfile.objects.get(username=user)
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
-    deliveries = Delivery.objects.filter(fk_id_delivery_man=user_profile.id)
+    deliveries = Delivery.objects.filter(fk_id_delivery_man=user_profile.id).exclude(finished=True)
 
     #MOSTRAR ORDENES EN CURSO
 
     user_id = user.id
-    user_requests = Request.objects.filter(fk_id_user=user.id)
+    user_requests = Request.objects.filter(fk_id_user=user.id).exclude(status="Finalizado")
     
     context = {
         'user': user,
@@ -90,8 +99,8 @@ def profile(request):
 
     #ELIMINAR ORDEN 
 
-    if request.method == 'POST' and request.POST.get('_method') == 'DELETE':
-        order_id = request.POST.get('order_id')  # Retrieve the id_request from the POST data
+    if request.method == 'POST' and request.POST.get('_method') == 'DELETE_ORDER':
+        order_id = request.POST.get('order_id')  
         try:
             delete_order = Request.objects.get(id_request=order_id)
             delete_order.delete()
@@ -101,8 +110,8 @@ def profile(request):
 
     #CANCELAR ENTREGA
 
-    if request.method == 'POST' and request.POST.get('_delivery') == 'DELETE':
-        delivery_id = request.POST.get('delivery_id')  # Retrieve the id_request from the POST data
+    if request.method == 'POST' and request.POST.get('_delivery') == 'DELETE_DELIVERY':
+        delivery_id = request.POST.get('delivery_id')  
         try:
             delete_order = Delivery.objects.get(id_delivery=delivery_id)
             order_untake = Request.objects.get(id_request=delete_order.fk_id_request.id_request)
@@ -111,6 +120,37 @@ def profile(request):
             delete_order.delete()
         except Request.DoesNotExist:
             pass
+        return redirect('/profile') 
+
+    #FINALIZAR ENTREGA
+
+    if request.method == 'POST' and request.POST.get('_delivery') == 'FINISH_DELIVERY':
+
+        delivery_id = request.POST.get('delivery_id')  
+        delivery_object = Delivery.objects.get(id_delivery=delivery_id)
+        request_item = Request.objects.get(id_request=delivery_object.fk_id_request.id_request)
+
+        Notification.objects.create(
+            recipient=request_item.fk_id_user,
+            message="Confirma la finalización de tu última entrega en el apartado de PERFIL (PROFILE)",
+        )
+
+        return redirect('/profile') 
+
+    #ORDEN RECIBIDA
+
+    if request.method == 'POST' and request.POST.get('_method') == 'RECEIVED_ORDER':
+
+        order_id = request.POST.get('order_id')  
+        order_object = Request.objects.get(id_request=order_id)
+
+        order_object.status = "Finalizado"
+        order_object.save()
+
+        delivery_associated = Delivery.objects.get(fk_id_request=order_id)
+        delivery_associated.finished = True
+        delivery_associated.save()
+
         return redirect('/profile') 
 
     #ENTREGAR PEDIDOS 

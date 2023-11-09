@@ -84,61 +84,104 @@
     </form>
 
     {% if is_delivering %}
-        <h2>Órdenes tomadas</h2>
-        <div class="container">
-            <div class="row">
-                {% for delivery in deliveries %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-text">Pedido: {{ delivery.fk_id_request.name}}</h5>
-                            <p class="card-text"><b>Cliente: </b> {{ delivery.fk_id_client.first_name}} {{ delivery.fk_id_client.last_name }}</p>
-                            <p class="card-text"><b>Hora pedido tomado: </b> {{ delivery.time }}</p>
-                            <p class="card-text"><b>Ir a: </b> {{ delivery.fk_id_request.pick_up_location }}</p>
-                            <p class="card-text"><b>Llevar a: </b> {{ delivery.fk_id_request.delivery_location }}</p>
-                            <p class="card-title"><b>Precio: </b> ${{ delivery.fk_id_request.price }}</p>
-                            <p class="card-text" style="color:red">{{ delivery.status }}</p>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-danger btn-cancel" type="button" data-bs-toggle="modal"
-                                data-bs-target="#cancelConfirmationModal{{ delivery.id_product }}">
-                                Cancel
-                            </button>
+    <h2>Órdenes tomadas</h2>
+    <div class="container">
+        <div class="row">
+            <!-- MOSTRAR ENTREGAS-->
+            {% for delivery in deliveries %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-text">Pedido: {{ delivery.fk_id_request.name}}</h5>
+                        <p class="card-text"><b>Cliente: </b> {{ delivery.fk_id_client.first_name}}
+                            {{delivery.fk_id_client.last_name }}</p>
+                        <p class="card-text"><b>Hora pedido tomado: </b> {{ delivery.time }}</p>
+                        <p class="card-text"><b>Ir a: </b> {{ delivery.fk_id_request.pick_up_location }}</p>
+                        <p class="card-text"><b>Llevar a: </b> {{ delivery.fk_id_request.delivery_location }}</p>
+                        <p class="card-title"><b>Precio: </b> ${{ delivery.fk_id_request.price }}</p>
+                        <p class="card-text" style="color:red">{{ delivery.status }}</p>
+                    </div>
 
-                            <!-- Confirmation Modal -->
-                            <div class="modal fade" id="cancelConfirmationModal{{ delivery.id }}" tabindex="-1"
-                                aria-labelledby="cancelConfirmationModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="cancelConfirmationModalLabel">Confirm Cancellation
-                                            </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to cancel this order?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <form method="post" action="/profile">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="_delivery" value="DELETE">
-                                                <input type="hidden" name="delivery_id" value="{{ delivery.id_delivery }}">
-                                                <button type="submit" class="btn btn-danger">Confirm Cancel</button>
-                                            </form>
-                                        </div>
+                    <div class="card-footer">
+                        <button class="btn btn-danger btn-cancel" type="button" data-bs-toggle="modal"
+                            data-bs-target="#cancelConfirmationModalDelivery{{ delivery.id_product }}">
+                            Cancelar
+                        </button>
+
+                        <!-- Confirmation Modal-delivery -->
+                        <div class="modal fade" id="cancelConfirmationModalDelivery{{ delivery.id }}" tabindex="-1"
+                            aria-labelledby="cancelConfirmationModalDeliveryLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="cancelConfirmationModalDeliveryLabel">Confirmar cancelacion</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Seguro que quieres cancelar esta orden?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cerrar</button>
+                                        <form method="post" action="/profile">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="_delivery" value="DELETE_DELIVERY">
+                                            <input type="hidden" name="delivery_id" value="{{ delivery.id_delivery }}">
+                                            <button type="submit" class="btn btn-danger">Confirmar</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Button to open the finish modal-delivery -->
+                        <button class="btn btn-primary btn-cancel" type="button" data-bs-toggle="modal"
+                            data-bs-target="#finishOrderConfirmationModal{{ delivery.id_product }}">
+                            Finalizar
+                        </button>
+
+                        <!-- Confirmation Modal for Finish delivery-->
+                        <div class="modal fade" id="finishOrderConfirmationModal{{ delivery.id }}" tabindex="-1"
+                            aria-labelledby="finishOrderConfirmationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="finishOrderConfirmationModalLabel">Confirmar
+                                            finalizacion
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Seguro que deseas marcar esta orden como entregada?
+                                        <br>
+                                        <i>*** El cliente será notificado y verificaremos la finalización de la
+                                            orden</i>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cerrar</button>
+                                        <form method="post" action="/profile">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="_delivery" value="FINISH_DELIVERY">
+                                            <input type="hidden" name="delivery_id" value="{{ delivery.id_delivery }}">
+                                            <button type="submit" class="btn btn-primary">Confirmar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
+    </div>
     {% endif %}
+
+    <!--MOSTRAR PEDIDOS DEL USUARIO-->
     <h2>Pedidos</h2>
     <div class="container">
         <div class="row">
@@ -154,64 +197,104 @@
                         <p class="card-text" style="color:red">{{ order.status }}</p>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-danger btn-cancel" type="button" data-bs-toggle="modal"
-                            data-bs-target="#cancelConfirmationModal{{ order.id_product }}">
-                            Cancel
-                        </button>
-
-                        <!-- Confirmation Modal -->
-                        <div class="modal fade" id="cancelConfirmationModal{{ order.id }}" tabindex="-1"
-                            aria-labelledby="cancelConfirmationModalLabel" aria-hidden="true">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-danger btn-cancel" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#cancelConfirmationModalOrder{{ order.id_product }}">
+                                    Cancel
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-primary btn-success" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#confirmOrderReceivedModal{{ order.id_product }}">
+                                    Recibido
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                       
+                        <!-- Confirmation CANCEL Modal-order -->
+                        <div class="modal fade" id="cancelConfirmationModalOrder{{ order.id }}" tabindex="-1"
+                            aria-labelledby="cancelConfirmationModalOrderLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="cancelConfirmationModalLabel">Confirm Cancellation
+                                        <h5 class="modal-title" id="cancelConfirmationModalOrderLabel">Confirmar cancelacion
                                         </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        Are you sure you want to cancel this order?
+                                        Seguro que quieres cancelar la orden?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
+                                            data-bs-dismiss="modal">Cerrar</button>
                                         <form method="post" action="/profile">
                                             {% csrf_token %}
-                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_method" value="DELETE_ORDER">
                                             <input type="hidden" name="order_id" value="{{ order.id_request }}">
                                             <button type="submit" class="btn btn-danger">Confirm Cancel</button>
                                         </form>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                          <!-- Confirmation RECEIVED Modal-order -->
+                          <div class="modal fade" id="confirmOrderReceivedModal{{ order.id }}" tabindex="-1"
+                          aria-labelledby="confirmOrderReceivedModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="confirmOrderReceivedModalLabel">Confirmar recepcion pedido
+                                      </h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                          aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                      ¿Ya recibiste tu orden?
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary"
+                                          data-bs-dismiss="modal">Cerrar</button>
+                                      <form method="post" action="/profile">
+                                          {% csrf_token %}
+                                          <input type="hidden" name="_method" value="RECEIVED_ORDER">
+                                          <input type="hidden" name="order_id" value="{{ order.id_request }}">
+                                          <button type="submit" class="btn btn-success">Confirmar</button>
+                                      </form>
+
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                     </div>
+                        
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
 
+        <h2>Historial de ordenes</h2>
+    <script>
+        //ACTIVAR / DESACTIVAR ENTREGA DE PEDIDOS 
 
-    <h2>Historial de ordenes</h2>
-</div>
-<script>
-    //ACTIVAR / DESACTIVAR ENTREGA DE PEDIDOS 
+        const form = document.getElementById('toggle-form');
+        const checkbox = document.getElementById('deliver-orders');
+        const isServiceProv = document.getElementById('is_service_prov');
 
-    const form = document.getElementById('toggle-form');
-    const checkbox = document.getElementById('deliver-orders');
-    const isServiceProv = document.getElementById('is_service_prov');
+        checkbox.checked = isServiceProv.value === 'True' ? true : false;
 
-    checkbox.checked = isServiceProv.value === 'True' ? true : false;
-
-    //checkbox.checked = isServiceProv.value;
-    checkbox.addEventListener('change', function () {
-        form.submit();
-    })
+        //checkbox.checked = isServiceProv.value;
+        checkbox.addEventListener('change', function () {
+            form.submit();
+        })
 
 
-</script>
+    </script>
 
 
-{% endblock %}
+    {% endblock %}

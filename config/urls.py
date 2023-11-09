@@ -16,6 +16,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('chat/', include('chat.urls')),
     path('addmenu/', bringuViews.addmenu),
+    path('', include('notifications.urls')),
 ]
 
 
