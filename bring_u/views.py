@@ -218,7 +218,7 @@ def available_orders(request):
     user= request.user
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
     #user_requests = Request.objects.all()
-    user_requests = Request.objects.exclude(status="Tomado")
+    user_requests = Request.objects.exclude(status="Tomado").exclude(status="Finalizado")
 
     context = {
         'is_delivering':is_delivering,
@@ -230,32 +230,39 @@ def available_orders(request):
             # Check if the user already has an ongoing delivery
             try:
                 current_delivery = Delivery.objects.filter(fk_id_delivery_man=user).latest('time')
-                order_status = Request.objects.get(id_request=current_delivery.fk_id_request.id_request, status="Tomado")
-
-                if order_status:
+                deliver_ongoing = current_delivery.finished
+                
+                print("DELIVER: ", deliver_ongoing)
+                if deliver_ongoing == False:
                     return redirect('/')
-
-            except Delivery.DoesNotExist:
-                order_id = request.POST.get('order_id')  
-                order = Request.objects.get(id_request=order_id)
-
-                delivery_exists = Delivery.objects.filter(fk_id_request=order_id).first()
-
-                if not delivery_exists:
-                    user_id = UserProfile.objects.get(username=user).id
-                    fk_client = UserProfile.objects.get(username=order.fk_id_user)
-
-                    Delivery.objects.create(
-                        fk_id_request=order,
-                        fk_id_client = fk_client,
-                        fk_id_delivery_man = user,
-                    )
-                    order.status = "Tomado"
-                    order.save()
-                    return redirect('/profile')
                 else:
-                    print('Orden ya tomada')
-                    return redirect('/')
+                    order_id = request.POST.get('order_id')  
+                    order = Request.objects.get(id_request=order_id)
+
+                    delivery_exists = Delivery.objects.filter(fk_id_request=order_id).first()
+
+                    if not delivery_exists:
+                        user_id = UserProfile.objects.get(username=user).id
+                        fk_client = UserProfile.objects.get(username=order.fk_id_user)
+
+                        delivery = Delivery.objects.create(
+                            fk_id_request=order,
+                            fk_id_client = fk_client,
+                            fk_id_delivery_man = user,
+                        )
+                        order.status = "Tomado"
+                        order.save()
+
+                        Chat.objects.create(
+                            fk_id_delivery=delivery,
+                        )
+                        return redirect('/profile')
+                    else:
+                        print('Orden ya tomada')
+                        return redirect('/')
+
+            except e:
+                return redirect('/')
 
     return render(request, "available_orders.html", context)
 
