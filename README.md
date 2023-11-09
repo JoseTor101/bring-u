@@ -33,7 +33,8 @@ To deploy the project, follow these steps:
 3. Access the application at `GCP - custom URL` or the appropriate URL.
 
 If not pretending to use realtime communication(Chat system), just use:
-1. Execute in root folder: `python manage.py runserver`
+- If dont wanna user chat system, Execute in root folder: `python manage.py runserver`
+- If you want to use chat system, Execute in root folder `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
 
 ## Project Description
 
