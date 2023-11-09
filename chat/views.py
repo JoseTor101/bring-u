@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 import json
 from .decorator import is_chat_member
+from django.db.models import Q
+
 
 @login_required
 def Chats(request):
@@ -14,7 +16,10 @@ def Chats(request):
 
     chats = []
     if current_user: 
-        chats = Chat.objects.filter(fk_id_delivery__fk_id_delivery_man=current_user)
+        #chats = Chat.objects.filter(fk_id_delivery__fk_id_delivery_man=current_user)
+        chats = Chat.objects.filter(
+            Q(fk_id_delivery__fk_id_delivery_man=current_user) | Q(fk_id_delivery__fk_id_client=current_user)
+        )
 
     context = {
         'chats':chats
@@ -37,8 +42,6 @@ def Conversation(request, id_chat):
         }
 
     if request.method == 'GET':
-        #if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-            # Check if it's an AJAX request
             messages_list = [
                 {
                     'user': message.sender.username,

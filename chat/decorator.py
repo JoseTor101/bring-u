@@ -27,10 +27,10 @@ def is_chat_member(view_func):
                     cliente = delivery.fk_id_client
                     repartidor = delivery.fk_id_delivery_man
                     
-                    cliente_ = str(cliente).strip()
-
+                    print("SOY CLIENTE: ",cliente)
 
                     if user == cliente or user == repartidor:
+                        print("MI CHAT ",cliente)
                         return view_func(request, *args, **kwargs)
                     else:
                         return redirect('/')  # Redirect to a different page if the user is not associated with the delivery
