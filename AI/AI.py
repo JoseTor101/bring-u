@@ -18,7 +18,7 @@ openai.api_key  = os.environ['openAI_api_key']
 # If you don't have tesseract executable in your PATH, include the following:
 #pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_your_tesseract_executable>'
 
-pytesseract.pytesseract.tesseract_cmd = r'AI\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'AI\Tesseract-OCR\tesseract'
 
 
 def read_image_from_dataUri(image_data):
