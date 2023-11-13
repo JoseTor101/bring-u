@@ -71,4 +71,4 @@ try:
 
 except e:
     print(f"An error occurred: {str(e)}")
-    return redirect('/')
+    redirect('/')
