@@ -30,6 +30,7 @@ For other OS look for custom tutorials
 
 To deploy the project, follow these steps:
 
+0. Export the secret API Key from openai using: `export openAI_api_key="<your_API_key>"`
 1. Collect static files: `python manage.py collectstatic`
 2. Run the ASGI server: `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
 3. Access the application at `GCP - custom URL` or the appropriate URL.
