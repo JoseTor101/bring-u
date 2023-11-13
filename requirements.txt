@@ -5,3 +5,5 @@ whitenoise
 pytesseract
 openai
 Pillow
+opencv-python
+python-dotenv
