@@ -21,6 +21,7 @@ class Product(models.Model):
 def upload_to(instance, filename):
     # Generate a safe file path within the 'orders_media' directory
     return f'media/{filename}'
+    
 class Request(models.Model):
     id_request = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
