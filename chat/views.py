@@ -55,20 +55,3 @@ def Conversation(request, id_chat):
             # For regular page request, return the HTML page
             return render(request, 'conversation.html', context)
         
-    """if request.method == 'POST':
-        content = request.POST.get('content')
-
-        # Create a new Message instance
-        message = Message.objects.create(
-            fk_id_chat=chat,
-            sender=current_user,
-            content=content,
-            timestamp=timezone.now()
-        )
-
-        # Update the last_update field of the associated chat
-        chat.last_update = timezone.now()
-        chat.save()
-       
-        return JsonResponse({'success': True}) """
-
