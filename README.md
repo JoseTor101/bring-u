@@ -13,7 +13,8 @@ In linux follow this steps:
 2. `sudo apt install -y python3-pip`
 3. `sudo su pip3 install django`
 4. `python3 -m pip install --upgrade pip`
-5. Install requirements: `pip install -r requirements.txt`
+5. `sudo apt-get install libgl1-mesa-glx`
+6. Install requirements: `pip install -r requirements.txt`
 
 For other OS look for custom tutorials
 
