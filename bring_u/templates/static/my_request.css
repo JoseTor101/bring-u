@@ -3,6 +3,6 @@
 }
 .imagen{
     width: 100%; /* La imagen ocupa el 100% del ancho del contenedor */
-    height: auto; /* La altura se ajusta automáticamente para mantener la proporción */
+    height: 100%; /* La altura se ajusta automáticamente para mantener la proporción */
     margin: 0; /* Elimina cualquier margen para evitar espacios */
 }

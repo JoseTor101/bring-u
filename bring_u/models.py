@@ -4,6 +4,7 @@ class Business(models.Model):
     id_business = models.AutoField(primary_key=True)
     name = models.CharField(max_length=70)
     desc = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='uploads/', default='food.png')
     opening_time = models.TimeField(default="07:00:00")
     closing_time = models.TimeField(default="18:00:00")
 

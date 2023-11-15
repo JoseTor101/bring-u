@@ -52,6 +52,7 @@ def business(request):
             user_id = UserProfile.objects.get(id=user.id)
             product = Product.objects.get(id_product=form_data['product_id'])
             business = product.fk_id_business.name
+
             
             Request.objects.create(
                     fk_id_user=user_id,
