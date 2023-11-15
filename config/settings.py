@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-t45gl3e+n1v9-(8@$6&$p8d1)(uh25knwxz1pz5k101d+s1h5e
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 
-ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','35.202.136.56']
+ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0','35.226.186.56']
 
 
 # Application definition
