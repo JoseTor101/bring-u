@@ -13,7 +13,9 @@ In linux follow this steps:
 2. `sudo apt install -y python3-pip`
 3. `sudo su pip3 install django`
 4. `python3 -m pip install --upgrade pip`
-5. Install requirements: `pip install -r requirements.txt`
+5. `sudo apt-get install libgl1-mesa-glx`
+6. `sudo apt-get install tesseract-ocr`
+6. Install requirements: `pip install -r requirements.txt`
 
 For other OS look for custom tutorials
 
@@ -28,13 +30,16 @@ For other OS look for custom tutorials
 
 To deploy the project, follow these steps:
 
+0. Export the secret API Key from openai using: `export openAI_api_key="<your_API_key>"`
 1. Collect static files: `python manage.py collectstatic`
 2. Run the ASGI server: `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
 3. Access the application at `GCP - custom URL` or the appropriate URL.
 
 If not pretending to use realtime communication(Chat system), just use:
-- If dont wanna user chat system, Execute in root folder: `python manage.py runserver`
-- If you want to use chat system, Execute in root folder `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
+- Execute in root folder: `python manage.py runserver`
+
+If you want to use chat system:
+- Execute in root folder `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
 
 ## Project Description
 
@@ -56,5 +61,4 @@ Bring-U is a standalone project and is not intended to be part of a larger syste
 ### User Base
 
 There is no specific distinction among users of our app. However, we anticipate that the primary user group will be college students, typically aged between seventeen and forty. This age group is more familiar with such platforms and uses them frequently.
-
 
