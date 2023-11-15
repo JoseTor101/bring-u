@@ -121,7 +121,12 @@ def my_request(request):
     return render(request, 'my_request.html')
 
 def addmenu(request):
+    result = None
+
     if request.method == 'POST':
         cropped_img = request.POST.get('image-data')
-        read_image_from_dataUri(cropped_img)
-    return render(request, 'addmenu.html')
+        result = read_image_from_dataUri(cropped_img)
+        result = result.strip().split(';')  # Divide la cadena en secciones
+        result = [section.split('_') for section in result]  # Divide cada sección en nombre, precio y descripción
+
+    return render(request, 'addmenu.html', {'result': result})

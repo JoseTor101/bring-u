@@ -157,6 +157,31 @@
     		<!-- download btn -->
     		<a href="" class="btn download hide">Download</a>
     	</div>
+
+        <div class="result-table">
+            {% if result %}
+        <!-- Div para la tabla -->
+        <div>
+            <!-- Encabezados de la tabla -->
+            <table border="1">
+                <tr>
+                    <th>Nombre Producto</th>
+                    <th>Precio Producto</th>
+                    <th>Descripción Producto</th>
+                </tr>
+                <!-- Iterar sobre cada sección en el resultado -->
+                {% for section_list in result %}
+                    <tr>
+                        <!-- Iterar sobre cada campo en la sección -->
+                        {% for field in section_list %}
+                            <td>{{ field }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+        </div>
     </main>
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
