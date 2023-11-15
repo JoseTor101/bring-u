@@ -262,7 +262,7 @@ def available_orders(request):
                         print('Orden ya tomada')
                         return redirect('/')
 
-            except e:
+            except :
                 return redirect('/')
 
     return render(request, "available_orders.html", context)
