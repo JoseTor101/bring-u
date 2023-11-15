@@ -273,3 +273,6 @@ def addmenu(request):
         cropped_img = request.POST.get('image-data')
         read_image_from_dataUri(cropped_img)
     return render(request, 'addmenu.html')
+
+def about_us(request):
+    return render(request, 'about_us.html')
