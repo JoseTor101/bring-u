@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
+{% load static %}
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    {% extends "base.html" %}
-    {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
     <title>BRING-U</title>
 </head>
@@ -30,13 +25,19 @@
   <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
+        <a href="{% url 'business_detail' id_business=4 %}">
           <img src="../../media/promfrisby.jpg" class="img-carousel" alt="Promo Frisby">
+        </a>
         </div>
         <div class="carousel-item">
+          <a href="{% url 'business_detail' id_business=6 %}">
           <img src="media\zyro-image.jpg" class="img-carousel" alt="Promo Juan Valdez">
+          </a>
         </div>
-        <div class="carousel-item">
-          <img src="../../media/Dunkindonuts.jpg" class="img-carousel" alt="Promo Dunkin Donuts">
+        <div class="carousel-item">   
+        <a href="{% url 'business_detail' id_business=5 %}">
+            <img src="../../media/Dunkindonuts.jpg" class="img-carousel" alt="Promo Dunkin Donuts">
+        </a>
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
@@ -49,7 +50,7 @@
       </button>
   </div>
 
-  <div class="servicios-container">
+  <div class="servicios-container" style="padding-left: 10vw;">
     <a href="/my_request">
       <img class="imagenservicio" src="media\CustomOrder.png" alt="Imagen">
     </a>
@@ -61,38 +62,43 @@
   
   <div class="cards-container">
     <div class="card1">
-      <img src="media\zyro-image1.jpg" class="card-img-top" alt="...">
+      <a href="{% url 'business_detail' id_business=3 %}">
+        <img src="media\zyro-image1.jpg" class="card-img-top" alt="...">
+      </a>
       <div class="card-body">
         <h5 class="card-title">#UneteATuCombo</h5>
-        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione deleniti voluptatum repudiandae expedita sapiente, enim consectetur, ullam amet quis, in molestias blanditiis earum similique? Qui dolorem illum eius fuga saepe.</p>
+        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. </p>
       </div>
-      <div class="card-body">
+      <!--<div class="card-body">
         <a href="#" class="card-link">Ver Más...</a>
-      </div>
+      </div>-->
     </div>
   
     <div class="card2">
-      <img src="media\dfbbd-editable-27-03.jpg" class="card-img-top" alt="...">
+      <a href="{% url 'business_detail' id_business=4 %}">
+        <img src="media\dfbbd-editable-27-03.jpg" class="card-img-top" alt="...">
+      </a>
       <div class="card-body">
         <h5 class="card-title">Comparte en casa</h5>
-        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione deleniti voluptatum repudiandae expedita sapiente, enim consectetur, ullam amet quis, in molestias blanditiis earum similique? Qui dolorem illum eius fuga saepe.</p>
+        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
       </div>
-      <div class="card-body">
+      <!--<div class="card-body">
         <a href="#" class="card-link">Ver Más...</a>
-      </div>
+      </div>-->
     </div>
   
     <div class="card3">
-      <img src="media\RavxkYrKkHGBCYJ4b-x-750.jpg" class="card-img-top" alt="...">
+      <a href="{% url 'business_detail' id_business=5 %}">
+        <img src="media\RavxkYrKkHGBCYJ4b-x-750.jpg" class="card-img-top" alt="...">
+      </a>
       <div class="card-body">
-        <h5 class="card-title">Comparte en casa</h5>
-        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione deleniti voluptatum repudiandae expedita sapiente, enim consectetur, ullam amet quis, in molestias blanditiis earum similique? Qui dolorem illum eius fuga saepe.</p>
+        <h5 class="card-title">Paga 6 lleva 12</h5>
+        <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. </p>
       </div>
-      <div class="card-body">
+      <!--<div class="card-body">
         <a href="#" class="card-link">Ver Más...</a>
-      </div>
+      </div>-->
     </div>
   </div>
   {% endblock %}
 </body>
-  

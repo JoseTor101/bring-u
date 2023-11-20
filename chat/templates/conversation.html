@@ -127,13 +127,20 @@
 
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
+
+            //FECHA TEMPORAL
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const now = new Date();
+            const tempTimeStamp = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}, ${now.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}`;
+            // -------
+
             const messageClass = data.username === username ? 'messages-sent' : 'messages-received';
             const messageElement = document.createElement('div');
             messageElement.className = `messages ${messageClass}`;
             messageElement.innerHTML = `
                 <span class="message-sender">${data.username}</span>
                 <p>${data.message}</p>
-                <p>${data.timestamp}</p>
+                <p>${tempTimeStamp}</p>
             `;
             console.log(data);
             chatContainer.appendChild(messageElement);

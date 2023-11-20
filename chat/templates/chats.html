@@ -32,9 +32,10 @@
             <ul id="container-chats">
                 {% for chat in chats %}
                 <li class="open-chat" data-chat-id="{{ chat.id_chat }}">
-                    <h3>Chat:{{ chat.id_chat }}</h3>
-                    <p>Last update: {{chat.last_update}}</p>
+                    <h3>Chat: {% if chat.fk_id_delivery.fk_id_delivery_man == username %}{{ chat.fk_id_delivery.fk_id_client }}{% else %}{{ chat.fk_id_delivery.fk_id_delivery_man }}{% endif %}</h3>
+                    <p>Last update: {{ chat.last_update }}</p>
                 </li>
+                
                 {% endfor %}
             </ul>
         </div>

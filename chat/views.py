@@ -22,7 +22,8 @@ def Chats(request):
         )
 
     context = {
-        'chats':chats
+        'chats':chats,
+        'username': current_user
     }
     return render(request, 'chats.html', context)
 
