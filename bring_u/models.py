@@ -4,6 +4,7 @@ class Business(models.Model):
     id_business = models.AutoField(primary_key=True)
     name = models.CharField(max_length=70)
     desc = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='uploads/restaurants', default='food.png')
     opening_time = models.TimeField(default="07:00:00")
     closing_time = models.TimeField(default="18:00:00")
 
@@ -32,7 +33,7 @@ class Request(models.Model):
     desc_delivery = models.CharField(max_length=1000, null=True)
     pick_up_location = models.CharField(max_length=250, default="Pick-up location")
     desc_pick_up_location = models.CharField(max_length=1000, null=True)
-    file= models.FileField(upload_to=upload_to, null=True)
+    file= models.FileField(upload_to='orders_media', null=True)
     fk_id_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     fk_id_product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     business_name = models.CharField(max_length=70, null=True)

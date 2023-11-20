@@ -12,7 +12,9 @@ class UserProfile(AbstractUser):
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=15, unique=True)
     tel = models.IntegerField(null=True)
-    profile_pic = models.ImageField(upload_to=upload_to, blank=True, null=True)
+    profile_pic = models.ImageField(upload_to='users/', blank=True, null=True, default='photoprofile.jpg')
     email = models.EmailField()
-    pass
-
+    
+    def __str__(self):
+        return self.username
+        

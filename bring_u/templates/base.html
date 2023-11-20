@@ -6,7 +6,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'my_request.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css'>
+    <!-- Cropper JS -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
     <title>BRING-U</title>
 </head>
 <body>
@@ -20,16 +25,14 @@
                 <div class="collapse navbar-collapse mr-auto" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item mr-auto" >
-                            <a class="nav-link" href="/" style="color: white">Home</a>
+                            <a class="nav-link" href="/" style="color: white">Inicio</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="/chat" style="color: white">Chats</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" style="color: white">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/chat" style="color: white">Chat</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/request" style="color: white"> Request</a>
+                            <a class="nav-link" href="/request" style="color: white">Solicitudes</a>
                             <!--<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Services
                             </a>
@@ -40,12 +43,12 @@
                         </li>
                         {% if is_delivering %}
                             <li class="nav-item">
-                                <a class="nav-link" href="/available_orders">Take orders</a>
+                                <a class="nav-link" href="/available_orders">Repartir</a>
                             </li>
                         {% endif %}
                       {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/profile" style="color: white">Profile</a>
+                            <a class="nav-link" href="/profile" style="color: white">Perfil</a>
                         </li>
                       {% endif %}
 
@@ -55,6 +58,9 @@
                       {% else%}
                         <a class="navbar-brand pr-4 logo" href="{% url 'notifications' %}"><img src="/media/bell.png" alt="" height="20px"></a>
                       {% endif %}
+                      <li class="nav-item">
+                        <a class="nav-link" href="/about_us" style="color: white">Sobre nosotros</a>
+                      </li>
                         <div class="navbar-nav ms-auto">
                             {% if user.is_authenticated %}
                             <a class="nav-link" href="{% url 'logoutaccount' %}">
@@ -85,6 +91,6 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js'></script>
 </body>
 </html>

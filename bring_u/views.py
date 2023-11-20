@@ -5,7 +5,6 @@ from .models import Business,Product, Request, Delivery
 from chat.models import Chat
 from accounts.models import UserProfile
 import json
-from AI.AI import read_image_from_dataUri
 #manejo de imagenes
 from django.core.files.uploadedfile import SimpleUploadedFile
 #Campo requerido para ver la vista
@@ -84,6 +83,7 @@ def profile(request):
     user_profile = UserProfile.objects.get(username=user)
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
     deliveries = Delivery.objects.filter(fk_id_delivery_man=user_profile.id).exclude(finished=True)
+    unread_notifications = Notification.objects.filter(is_read=False)
 
     #MOSTRAR ORDENES EN CURSO
 
@@ -94,7 +94,8 @@ def profile(request):
         'user': user,
         'orders': user_requests,
         'is_delivering': is_delivering,
-        'deliveries':deliveries
+        'deliveries':deliveries,
+        'unread_notifications':unread_notifications
     }
 
     #ELIMINAR ORDEN 
@@ -132,7 +133,7 @@ def profile(request):
 
         Notification.objects.create(
             recipient=request_item.fk_id_user,
-            message="Confirma la finalización de tu última entrega en el apartado de PERFIL (PROFILE)",
+            message=f"Confirma la finalización de tu últim pedido con ID {request_item.id_request} en el apartado de PERFIL (PROFILE)",
         )
 
         return redirect('/profile') 
@@ -222,20 +223,22 @@ def available_orders(request):
 
     context = {
         'is_delivering':is_delivering,
-        'user_request':user_requests
+        'user_requests':user_requests
     }
 
-    #Tomar ordenes 
+    #TOMAR ORDENES
     if request.method == "POST":
             # Check if the user already has an ongoing delivery
+            
             try:
                 current_delivery = Delivery.objects.filter(fk_id_delivery_man=user).latest('time')
-                deliver_ongoing = current_delivery.finished
+                print("------", current_delivery)
+                if current_delivery:
+                    deliver_finished= current_delivery.finished
+                    if deliver_finished == False:
+                        return redirect('/')
                 
-                print("DELIVER: ", deliver_ongoing)
-                if deliver_ongoing == False:
-                    return redirect('/')
-                else:
+                if not current_delivery or deliver_finished == True:
                     order_id = request.POST.get('order_id')  
                     order = Request.objects.get(id_request=order_id)
 
@@ -261,14 +264,41 @@ def available_orders(request):
                         print('Orden ya tomada')
                         return redirect('/')
 
-            except e:
-                return redirect('/')
+            except:
+                order_id = request.POST.get('order_id')  
+                order = Request.objects.get(id_request=order_id)
+
+                delivery_exists = Delivery.objects.filter(fk_id_request=order_id).first()
+
+                if not delivery_exists:
+                    user_id = UserProfile.objects.get(username=user).id
+                    fk_client = UserProfile.objects.get(username=order.fk_id_user)
+
+                    delivery = Delivery.objects.create(
+                        fk_id_request=order,
+                        fk_id_client = fk_client,
+                        fk_id_delivery_man = user,
+                    )
+                    order.status = "Tomado"
+                    order.save()
+
+                    Chat.objects.create(
+                        fk_id_delivery=delivery,
+                    )
+                    return redirect('/profile')
+                else:
+                    print('Orden ya tomada')
+                    return redirect('/')
 
     return render(request, "available_orders.html", context)
 
-@login_required
-def addmenu(request):
-    if request.method == 'POST':
-        cropped_img = request.POST.get('image-data')
-        read_image_from_dataUri(cropped_img)
-    return render(request, 'addmenu.html')
+
+
+def about_us(request):
+    user= request.user
+    is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
+
+    context = {
+        'is_delivering': is_delivering
+    }
+    return render(request, 'about_us.html', context)

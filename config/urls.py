@@ -15,8 +15,9 @@ urlpatterns = [
     path('available_orders', bringuViews.available_orders),
     path('accounts/', include('accounts.urls')),
     path('chat/', include('chat.urls')),
-    path('addmenu/', bringuViews.addmenu),
     path('', include('notifications.urls')),
+    path('addmenu/', include('AI.urls')),
+    path('about_us/', bringuViews.about_us),
 ]
 
 

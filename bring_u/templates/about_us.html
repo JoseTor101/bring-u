@@ -1,0 +1,49 @@
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <style>
+        .foto{
+            width: auto;
+            height: 200px;
+            border-radius: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 5px solid #F59422;
+        }
+
+        .texto, .texto1{
+            text-align: left;
+            padding-top: 10px;
+            padding-left: 25px;
+        }
+
+        .texto1{
+            padding-top: 50px;
+        }
+
+        .col-sm-6{
+            background-color: #F0592C ;
+        }
+    </style>
+    <div class="row g-0 text-center">
+        <div class="col-sm-6 col-md-4">.
+            <img class="foto" src="/../media/jose.jpg" alt="">
+            <br>
+            <img class="foto" src="/../media/cris.jpg" alt="">
+            <br>
+            <img class="foto" src="/../media/manu.jpg" alt="">
+        </div>
+        <div class="col-6 col-md-8">
+            <h1 class="texto1">Mission: </h1>
+            <p class="texto"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem inventore repellendus voluptates amet. Facilis recusandae voluptate saepe possimus sit consequuntur. Iure velit sequi id obcaecati, soluta dolor illo reiciendis inventore.</p>
+            <h1 class="texto">Vision: </h1>
+            <p class="texto"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, nam distinctio, error perferendis eum ullam delectus itaque quibusdam vel aliquid ut reprehenderit tenetur minima adipisci vitae cupiditate. Hic, magni mollitia.</p>
+            <h1 class="texto">Our Politics</h1>
+            <p class="texto">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit architecto minima quod cupiditate, rem temporibus reprehenderit quam sunt tempore eius. Perferendis doloremque reiciendis deserunt sed nam eius nemo placeat ea.</p>
+        </div>
+    </div>
+    {% endblock %}
+</body>
