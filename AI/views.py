@@ -4,7 +4,7 @@ from django.contrib import messages
 from bring_u.models import Business, Product
 from accounts.models import UserProfile
 import json
-from .ai import read_image_from_dataUri
+from .AI import read_image_from_dataUri
 # Manejo de imágenes
 from django.core.files.uploadedfile import SimpleUploadedFile
 # Campo requerido para ver la vista
