@@ -142,7 +142,7 @@
             <a href="" class="btn download hide">Download</a>
         </div>
 
-        <div class="result-table">
+        <!--<div class="result-table">
             <form method="post" action="">
                 {% csrf_token %}
                 <select name="selected_business">
@@ -167,7 +167,112 @@
                 <input type="submit" value="Guardar">
             </form>
         </div>
+        <form id="save-products" method="post" action="">
+            {% csrf_token %}
+            <select name="selected_business">
+                {% for business in businesses %}
+                    <option value="{{ business.id }}">{{ business.name }}</option>
+                {% endfor %}
+            </select>
+            <label for="selected_business">Negocio del producto a registrar: </label>
+            <div id="product-container">
+                {% for item in data_list %}
+                    <div class="product-item">
+                        <div class="product-name"></div>
+                        <div class="product-price"></div>
+                        <div class="product-desc"></div>
+                    </div>
+                {% endfor %}
+                <button type="button" id="add-product-button" class="btn btn-primary">Agregar producto manualmente</button>
+            </div>
+            <button type="submit" class="btn btn-success">Guardar productos (Añadir confirmación)</button>
+        </form>-->
+        <form method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" name="method" value="SAVE_PRODUCTS">
+            <label for="selected_business">Negocio del producto a registrar: </label>
 
+            <select name="selected_business_id">
+                {% for business in businesses %}
+                    <option value="{{ business.id_business }}">{{ business.name }}</option>
+                {% endfor %}
+            </select>
+
+            <table class="table">
+                <thead class="thead-dark">
+              <tr>
+                <th scope="col">Nombre producto</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Descripción</th>
+              </tr>
+            </thead>
+            <tbody id="table-items">
+            {% for product in data_list %}
+                <tr>
+                    <td><input type="text" name="item_name[]" value="{{ product.0 }}"></td>
+                    <td><input type="number" name="item_price[]" value="{% if product|length > 1 %}{{ product.1 }}{% endif %}"></td>
+                    <td><textarea name="item_desc[]">{% if product|length > 2 %}{{ product.2 }}{% endif %}</textarea></td>
+                    <td><button type="button" class="btn btn-danger bg-danger" onclick="remove(this)">-</button></td>
+                </tr>
+            {% endfor %}
+            
+            </tbody>
+          </table>
+          <button type="button" id="add-product-button" class="btn btn-primary bg-primary">Agregar producto manualmente</button>
+          <button type="submit" class="btn btn-success bg-success">Guardar productos (Añadir confirmación)</button>
+        </form>
+        <div id="output">
+            <h3>Salida en bruto de la IA:</h3>
+            <p>{{ data_list }}</p>
+        </div>
     </main>
 
+    <script>
+        product_container = document.getElementById('table-items');
+        add_product_button = document.getElementById('add-product-button');
+        add_product_button.addEventListener('click', appendProduct);
+
+        function appendProduct() {
+            let new_product = document.createElement("tr");
+
+            let new_product_name = document.createElement("td");
+            let name_input = document.createElement("input");
+            name_input.setAttribute("type", "text");
+            name_input.setAttribute("name", "item_name[]"); 
+            new_product_name.appendChild(name_input);
+
+            let new_product_price = document.createElement("td");
+            let price_input = document.createElement("input");
+            price_input.setAttribute("type", "number");
+            price_input.setAttribute("name", "item_price[]"); 
+            new_product_price.appendChild(price_input);
+
+            let new_product_desc = document.createElement("td");
+            let desc_input = document.createElement("textarea");
+            desc_input.setAttribute("name", "item_desc[]"); 
+            new_product_desc.appendChild(desc_input);
+
+            let removeButton = document.createElement("button");
+            removeButton.textContent = "-";
+            removeButton.setAttribute("type", "button");
+            removeButton.classList.add("btn", "btn-danger", "bg-danger");
+            removeButton.addEventListener("click", function() {
+                new_product.parentElement.removeChild(new_product);
+            });
+            new_product.appendChild(removeButton);
+
+            new_product.appendChild(new_product_name);
+            new_product.appendChild(new_product_price);
+            new_product.appendChild(new_product_desc);
+            new_product.appendChild(removeButton);
+
+            product_container.appendChild(new_product);
+        }
+
+
+        function remove(clickedButton){
+            var row = clickedButton.parentElement.parentElement; // Get the parent of the parent of the clicked button
+            row.parentNode.removeChild(row); // Remove the parent of the parent from its parent node
+        }
+    </script>
     {% endblock %}
