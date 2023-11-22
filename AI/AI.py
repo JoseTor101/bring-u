@@ -1,22 +1,15 @@
 import sys
-sys.path.append("../Lib")
-sys.path.append("../pytesseract")
-
-import pytesseract
-from pytesseract import Output
 import os
 import cv2
 import numpy as np
 import base64
 import openai
-import json
 from dotenv import load_dotenv, find_dotenv
-from django.shortcuts import redirect 
+from django.shortcuts import redirect
+import pytesseract  # Asegúrate de agregar esta línea
 
-#_ = load_dotenv('openAI_.env')
 _ = load_dotenv(find_dotenv(filename='openAI.env'))
-openai.api_key  = os.environ['openAI_api_key1']
-pytesseract.pytesseract.tesseract_cmd = r'AI\Tesseract-OCR\tesseract.exe'
+openai.api_key = os.environ['openAI_api_key1']
 
 try:
     def get_completion(prompt, model="gpt-3.5-turbo"):
@@ -48,6 +41,9 @@ try:
 
         # Read the image using cv2
         img = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+
+        # Utiliza el path al ejecutable de tesseract en Linux
+        pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
         result = pytesseract.image_to_string(img, config=config)
         print(result)
