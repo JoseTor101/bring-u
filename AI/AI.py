@@ -14,7 +14,7 @@ from dotenv import load_dotenv, find_dotenv
 from django.shortcuts import redirect 
 
 #_ = load_dotenv('openAI_.env')
-_ = load_dotenv(find_dotenv(filename='openAI_.env'))
+_ = load_dotenv(find_dotenv(filename='openAI.env'))
 openai.api_key  = os.environ['openAI_api_key1']
 pytesseract.pytesseract.tesseract_cmd = r'AI\Tesseract-OCR\tesseract.exe'
 
