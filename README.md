@@ -14,6 +14,7 @@ In linux follow this steps:
 3. `sudo su pip3 install django`
 4. `python3 -m pip install --upgrade pip`
 5. `sudo apt-get install libgl1-mesa-glx`
+6. `sudo apt-get install tesseract-ocr`
 6. Install requirements: `pip install -r requirements.txt`
 
 For other OS look for custom tutorials
@@ -29,12 +30,16 @@ For other OS look for custom tutorials
 
 To deploy the project, follow these steps:
 
+0. Export the secret API Key from openai using: `export openAI_api_key="<your_API_key>"`
 1. Collect static files: `python manage.py collectstatic`
 2. Run the ASGI server: `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
 3. Access the application at `GCP - custom URL` or the appropriate URL.
 
 If not pretending to use realtime communication(Chat system), just use:
-1. Execute in root folder: `python manage.py runserver`
+- Execute in root folder: `python manage.py runserver`
+
+If you want to use chat system:
+- Execute in root folder `daphne -b 0.0.0.0 -p 8000 config.asgi:application`
 
 ## Project Description
 
