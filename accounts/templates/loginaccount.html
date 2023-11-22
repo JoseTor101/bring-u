@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .card-title, p {
+
+        display: inline-block;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: fit-content;
+    }
+    .card-body{
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        background-image: url(../../media/loginbackground.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+        justify-content: center;
+    }
+    .card-text {
+        width: fit-content;
+    }
+
+    .container {
+        display:flex;
+        justify-content: center;
+        padding: 0;
+    }
+</style>
+<div class="card mb-3">
+    <div class="row g-0">
+        <div class="container">
+            <div class="card-body">
+                <h5 class="card-title">Login</h5>
+                {% if error %}
+                <div class="alert alert-danger mt-3" role="alert">
+                    {{ error }}
+                </div>
+                {% endif %}
+                <div class="card-text">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

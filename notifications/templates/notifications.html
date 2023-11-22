@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .notification {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 10px;
+            background-color: #f5f5f5;
+        }
+        
+        .read {
+            background-color: #e0e0e0;
+        }
+        
+        .unread {
+            background-color: #fff;
+        }
+        
+        small {
+            color: #888;
+        }
+        
+        .mark-as-read {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        .finish-delivery {
+            background-color: #337ab7;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="notifications">
+    {% for notification in notifications %}
+        <div class="notification {% if notification.is_read %}read{% else %}unread{% endif %}">
+            <p>{{ notification.message }}</p>
+            <small>{{ notification.timestamp }}</small>
+            {% if not notification.is_read %}
+                <button class="mark-as-read">Mark as Read</button>
+            {% endif %}
+            {% if notification.finish_delivery %}
+                <button class="finish-delivery" data-notification-id="{{ notification.id }}">Finish Delivery</button>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No notifications.</p>
+    {% endfor %}
+</div>
+
+<script>
+    // JavaScript code to handle the "Finish Delivery" button click event
+    const finishDeliveryButtons = document.querySelectorAll(".finish-delivery");
+    finishDeliveryButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const notificationId = this.getAttribute("data-notification-id");
+            // Send a request to finish the delivery, e.g., using AJAX
+            // You should implement the logic to handle the delivery finishing request here
+            // You can use JavaScript's fetch API or jQuery.ajax for this purpose
+            // Example using fetch:
+            fetch(`/finish_delivery/${notificationId}`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken, // Include your CSRF token
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ notification_id: notificationId }),
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    // Handle a successful response, e.g., update the UI
+                    this.disabled = true; // Disable the button after finishing
+                } else {
+                    // Handle an error response, if needed
+                }
+            })
+            .catch(error => {
+                // Handle any network errors, if needed
+            });
+        });
+    });
+</script>
+</body>
+</html>

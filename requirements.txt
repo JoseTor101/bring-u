@@ -1,0 +1,9 @@
+channels
+daphne
+twisted[http2,tls]
+whitenoise
+pytesseract
+openai
+Pillow
+opencv-python
+python-dotenv

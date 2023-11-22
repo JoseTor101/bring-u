@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+    {% block content %}
+        <div class="container mt-5">
+            <h1>Ordenes disponibles</h1>
+            <div class="container">
+                <div class="row">
+                    {% for order in user_requests %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <!--We use " | title  " to capitalize first letter of all strings-->
+                                {% if order.business_name %}
+                                {{ order.id_request  }}
+                                <h5 class="card-title">Comprar en: {{ order.business_name|title }}</h5>
+                                {%endif%}
+                                <h5 class="card-title">Entregar en: {{ order.delivery_location|title}}</h5>
+                                <h6 class="card-title">Pedido: {{ order.name|title }}</h6>
+                                <p class="card-text">Precio: ${{ order.price }}</p>
+                                <p class="card-text" style="color:red">{{ order.status }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-success btn-cancel" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#cancelConfirmationModal{{ order.id_request }}">
+                                    Detalles
+                                </button>
+        
+                                <!-- Confirmation Modal -->
+                                <div class="modal fade" id="cancelConfirmationModal{{ order.id_request }}" tabindex="-1"
+                                    aria-labelledby="cancelConfirmationModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="cancelConfirmationModalLabel">Detalles de orden</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="card-text"><b>ID: </b> {{ order.id_request }}</p>
+                                                <p class="card-text"><b>Pedido: </b> {{ order.name }}</p>
+                                                <p class="card-text"><b>Descripcion pedido: </b> {{ order.desc }}</p>
+                                                <p class="card-text"><b>Precio: </b> {{ order.price }}</p>
+                                                <p class="card-text"><b>Lugar de pedido: </b> {{ order.pick_up_location }}</p>
+                                                {% if order.desc_pick_up_location %}
+                                                    <p class="card-text"><b>Detalles lugar de pedido: </b>{{ order.desc_pick_up_location }}</p>
+                                                {% endif %}
+                                                <p class="card-text"><b>Lugar de entrega: </b> {{ order.delivery_location }}</p>
+                                                <p class="card-text"><b>Detalles entrega: </b> {{ order.desc_delivery }}</p>
+                                                <p class="card-text"></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <form method="post" action="/available_orders">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="order_id" value="{{ order.id_request }}">
+                                                    <button type="submit" class="btn btn-success">Tomar orden</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+{% endblock %}  

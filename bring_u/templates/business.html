@@ -1,0 +1,81 @@
+<style>
+  /*.navbar-brand {
+      margin-right: 60vw!important; 
+  }*/
+  #restaurant-list {
+    margin-left: 5vw;
+  }
+
+  .img-fluid{
+    width: 110px!important;
+  }
+  #searchReference {
+    width: 100vw;
+    text-align: center;
+  }
+  #clickable-container {
+    cursor: pointer;
+  }
+
+  .container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .column {
+        flex: 0 0 33.33%;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+</style>
+
+<body>
+{% extends "base.html" %}
+{% block content %}
+<br>
+<h2 id="restaurant-list">Lista de negocios disponibles</h2>
+
+<div class="barra-de-busqueda">
+  <div class="col-md-6">
+    <form class="d-flex" action="">
+      <input class="form-control me-2" name="searchBusiness" type="text"  placeholder="Buscar" aria-label="Search">
+      <button class="btn btn-primary" type="submit">Buscar</button>
+    </form>
+  </div>
+</div>
+
+<div id="searchReference">
+  <p>Searching for {{ searchBusiness }}</p>
+</div>
+
+<div class="container">
+  {% for business in businesses %}
+  <div class="column">
+
+    <div class="card" style="width: 18rem;" onclick="redirectToLink('{{business.id_business}}')"">
+      <img src="{{ business.image.url }}" class="card-img-top" style="width: auto;" alt="{{ business.name }}">
+      <div class="card-body">
+        <h5 class="card-title" style="text-align: center;">{{business.name}}</h5>
+        <p class="card-text" style="text-align: center;">{{business.desc}}</p>
+      </div>
+      <ul class="list-group list-group-flush" style="text-align: center;">
+        <li class="list-group-item">★★★★★</li>
+      </ul>
+      <!--<div class="container mt-1" id="clickable-container" onclick="redirectToLink('{{business.id_business}}')">
+        <a class="card-link">Ver Más</a>
+      </div>-->
+    </div>
+
+  </div>
+  {%endfor%}
+</div>
+
+  
+</div>
+<script>
+  function redirectToLink(url) {
+      window.location.href = '/business/'+url;
+  }
+</script>
+{% endblock %}
+</body>
