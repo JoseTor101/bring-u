@@ -5,19 +5,19 @@ from django.conf.urls.static import static
 from bring_u import views as bringuViews 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', bringuViews.home),
-    path('business',bringuViews.business),
+    path('admin/', admin.site.urls),
+    path('profile/', bringuViews.profile, name='profile'),
+    path('request/', bringuViews.orders),
+    path('delivery_custom/', bringuViews.delivery_custom),
+    path('business/', bringuViews.business, name='business'),
     path('business/<int:id_business>/', bringuViews.product, name='business_detail'),
-    path('profile', bringuViews.profile),
-    path('request', bringuViews.orders),
-    path('my_request', bringuViews.my_request),
-    path('available_orders', bringuViews.available_orders),
+    path('available_orders/', bringuViews.available_orders),
+    path('about_us/', bringuViews.about_us),
     path('accounts/', include('accounts.urls')),
+    path('addmenu/', include('AI.urls')),
     path('chat/', include('chat.urls')),
     path('', include('notifications.urls')),
-    path('addmenu/', include('AI.urls')),
-    path('about_us/', bringuViews.about_us),
 ]
 
 

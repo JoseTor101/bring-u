@@ -1,0 +1,97 @@
+<h2>Pedidos</h2>
+<div class="container">
+    <div class="row">
+        {% for order in orders %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ order.id_request }}</h5>
+                    <h5 class="card-title">{{ order.name }}</h5>
+                    <h5 class="card-title">{{ order.fk_id_business }}</h5>
+                    <p class="card-text">{{ order.desc }}</p>
+                    <p class="card-text">Price: ${{ order.price }}</p>
+                    <p class="card-text" style="color: {% if order.status == 'Tomado' %}blue{% else %}red{% endif %}">{{
+                        order.status }}</p>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-danger btn-cancel" type="button" data-bs-toggle="modal"
+                                data-bs-target="#cancelConfirmationModalOrder{{ order.id_product }}">
+                                Cancel
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-primary btn-success" type="button" data-bs-toggle="modal"
+                                data-bs-target="#confirmOrderReceivedModal{{ order.id_product }}">
+                                Recibido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirmation CANCEL Modal-order -->
+                <div class="modal fade" id="cancelConfirmationModalOrder{{ order.id }}" tabindex="-1"
+                    aria-labelledby="cancelConfirmationModalOrderLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cancelConfirmationModalOrderLabel">Confirmar cancelacion
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Seguro que quieres cancelar la orden?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <form method="post" action="{% url 'profile' %}"></form>
+                                    {% csrf_token %}
+                                    <input type="hidden" name="_method" value="DELETE_ORDER">
+                                    <input type="hidden" name="order_id" value="{{ order.id_request }}">
+                                    <button type="submit" class="btn btn-danger">Confirm Cancel</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirmation RECEIVED Modal-order -->
+                <div class="modal fade" id="confirmOrderReceivedModal{{ order.id }}" tabindex="-1"
+                    aria-labelledby="confirmOrderReceivedModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmOrderReceivedModalLabel">Confirmar recepcion pedido
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Ya recibiste tu orden?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <form method="post" action="/profile">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="_method" value="RECEIVED_ORDER">
+                                    <input type="hidden" name="order_id" value="{{ order.id_request }}">
+                                    <button type="submit" class="btn btn-success">Confirmar</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<br>
+<br>
+<h2>Historial de ordenes</h2>
+</div>

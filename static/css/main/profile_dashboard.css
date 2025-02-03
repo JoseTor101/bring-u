@@ -1,0 +1,158 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+main {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFA500;
+    background-image: linear-gradient(to bottom right, #FF7F50, #FF4500);
+}
+
+.main-profile-c {
+    color: white;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+.left-profile-c, .right-profile-c {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.left-profile-c {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px 0 0 10px;
+    text-align: center;
+}
+
+.activate-delivery-c{
+    margin: auto;
+}
+
+.profile-pic{
+    width: 150px; 
+    height: auto;
+    border-radius: 50%;
+    border: 5px solid #F0592C;
+}
+
+.staff-menu-c{
+    display: grid;
+    place-items: center;
+}
+
+.staff-menu-c > h3{
+    padding-right: 10px;
+}
+
+.staff-menu-c > button{
+    background-color: #007bff;
+    color: #fff; 
+    padding: 10px 15px;
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer;
+}
+/* Slider styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+
+.right-profile-c {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 0 10px 10px 0;
+    color: black;
+    overflow-y: scroll;
+}
+
+#title {
+    margin-bottom: 40px;
+}
+
+
+
+.flex-deliveries-c {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    gap: 20px; /* Space between grid items */
+    margin-bottom: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}

@@ -10,12 +10,16 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('/')
+            try:
+                user = form.save()
+                login(request, user)
+                return redirect('/')
+            except IntegrityError:
+                form.add_error(None, "A user with that username already exists.")
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
+
 
 @login_required
 def logoutaccount(request):

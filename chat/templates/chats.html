@@ -1,41 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/chat/chats.css' %}">
+{% endblock head %}
+
+
 {% block content %}
-<style>
-    #chat-list {
-        margin-left: -5%!important;
-    }
-    #container-chats {
-        list-style: none;
-        width: 25vw;
-        overflow: auto;
-        overflow-x: hidden;
-    }
-    #container-chats > li {
-        padding-left: 5%;
-        margin: 2% 0 2% 0;
-        border: 1px solid black;
-        border-radius: 34px;
-        cursor: pointer;
-    }
-    #chat-container {
-        border: 1px solid #ccc;
-        padding: 10px;
-        height: 70vh;
-        min-height: 300px; /* Adjust the height as needed */
-    }
-</style>
-<h1>Sistema de chat</h1>
+<h1 class="chats-title text-center pt-3 text-white">Chats</h1>
 
 <div class="container mt-1" id="main-container">
     <div class="row">
         <div class="col" id="chat-list">
             <ul id="container-chats">
                 {% for chat in chats %}
-                <li class="open-chat" data-chat-id="{{ chat.id_chat }}">
-                    <h3>Chat: {% if chat.fk_id_delivery.fk_id_delivery_man == username %}{{ chat.fk_id_delivery.fk_id_client }}{% else %}{{ chat.fk_id_delivery.fk_id_delivery_man }}{% endif %}</h3>
-                    <p>Last update: {{ chat.last_update }}</p>
-                </li>
-                
+                    <li class="open-chat" data-chat-id="{{ chat.id_chat }}">
+                        <h3>Chatear con: {% if chat.fk_id_delivery.fk_id_delivery_man == username %}{{ chat.fk_id_delivery.fk_id_client }}{% else %}{{ chat.fk_id_delivery.fk_id_delivery_man }}{% endif %}</h3>
+                        <p>Last update: {{ chat.last_update }}</p>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
@@ -52,7 +34,6 @@
             const chatId = openChat.getAttribute('data-chat-id');
 
             // Dynamically load the content from "conversation.html" using AJAX
-            // For simplicity, we'll use a placeholder message
             const currentUrl = window.location.href;
             const newUrl = `${currentUrl}${chatId}`;
             window.location.href = newUrl;
