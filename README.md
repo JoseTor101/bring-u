@@ -1,4 +1,8 @@
-# Bring-U Project README
+# Bring-U Project
+
+Bring-u is a platform designed to connect students with restaurants and other services within the university campus. Its goal is to address daily needs such as restaurant orders, favors, and urgent requests. Additionally, it provides students with opportunities to earn money by fulfilling orders.
+
+The platform was developed using Django for both backend and frontend, Bootstrap for the interface, Tesseract-OCR to update restaurant menus, ChatGPT to enhance menu processing, and Django Channels with WebSockets for real-time messaging.
 
 ## Introduction
 
