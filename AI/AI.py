@@ -10,6 +10,8 @@ import pytesseract  # Asegúrate de agregar esta línea
 
 _ = load_dotenv(find_dotenv(filename='openAI.env'))
 openai.api_key = os.environ['openAI_api_key1']
+#Windows
+#pytesseract.pytesseract.tesseract_cmd = r'AI\Tesseract-OCR\tesseract.exe'
 
 try:
     def get_completion(prompt, model="gpt-3.5-turbo"):

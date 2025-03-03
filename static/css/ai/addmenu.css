@@ -1,0 +1,121 @@
+main {
+    background-color: #FFA500;
+    background-image: linear-gradient(to bottom right, #FF7F50, #FF4500);
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 100vw;
+    min-height: 100%;
+}
+
+.box {
+    padding: 0.5em;
+    width: 100%;
+    margin: 0.5em;
+}
+
+.box-2 {
+    padding: 0.5em;
+    width: calc(100%/2 - 1em);
+}
+
+.options label,
+.options input {
+    width: 4em;
+    padding: 0.5em 1em;
+}
+
+.btn {
+    background: white;
+    color: black;
+    border: 1px solid black;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    margin: 0.8em 0.3em;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+.addmenu-container {
+    position: relative;
+    height: auto;
+    width: 70%;
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+}
+
+.addmenu-title {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.addmenu-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.addmenu-form .form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addmenu-form label {
+    font-size: 16px;
+    font-weight: bold;
+    flex: 1;
+    margin-right: 10px;
+}
+
+.addmenu-form input,
+.addmenu-form textarea,
+.addmenu-form select {
+    flex: 2;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.addmenu-form button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.addmenu-form button:hover {
+    background-color: #0056b3;
+}
+
+.addmenu-form a {
+    color: #007bff;
+    text-decoration: none;
+    text-align: center;
+}
+
+.addmenu-form a:hover {
+    text-decoration: underline;
+}
+
+.alert {
+    margin-top: 20px;
+}

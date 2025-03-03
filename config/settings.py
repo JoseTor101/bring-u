@@ -148,9 +148,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "bring_u/templates/static"), 
+    BASE_DIR / "static",
 ]
 
 # Default primary key field type
@@ -163,8 +163,7 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = "accounts.UserProfile"  
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_URL = "/static/"
+
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 # DONT USE DEBUG ON PRODUCTION 

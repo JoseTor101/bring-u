@@ -1,0 +1,87 @@
+.home-title{
+    text-align: center;
+    font-style: italic;
+}
+
+.home-background {
+    background-color: #FFA500;
+    background-image: linear-gradient(to bottom right, #FF7F50, #FF4500);
+    color: white; 
+    min-height: 100vh;
+    padding: 20px;
+}
+
+
+.btncustomorder {
+    position: relative;
+    overflow: hidden;
+}
+
+.button-content {
+    position: relative;
+}
+
+
+.btncustomorder:hover .button-text {
+    background-color: rgba(0, 0, 0, 0.7); /* Cambiar el color de fondo al pasar el mouse si lo deseas */
+}
+
+.carousel{
+    display:flex;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.search-bar-container{
+    padding: 10px;
+    text-align: center;
+    justify-content: center;
+}
+
+.search-bar-container .form-control {
+    font-size: 1.5rem; /* Increase font size */
+    padding: 15px; /* Increase padding */
+    height: auto; /* Adjust height */
+}
+
+.search-bar-container .btn {
+    font-size: 1.5rem; /* Increase font size */
+    padding: 15px 30px; /* Increase padding */
+    height: auto; /* Adjust height */
+}
+
+
+.col-md-6{
+    display: inline-block;
+    width:50%;
+}
+
+.services-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    gap: 4rem; 
+    flex-direction: row; 
+    width: 100%;
+    padding: 20px 0 20px 0;
+}
+
+.services-container > a {
+    flex: 0 0 auto; 
+}
+
+.service-img {
+    border-radius: 10px;
+    max-width: 30vw;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+.img-carousel{
+    width: 100%; /* Fixed */
+    height: 320px;
+}

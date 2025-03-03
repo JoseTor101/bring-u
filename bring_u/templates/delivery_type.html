@@ -1,0 +1,37 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/select_request.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="h-title">Solicitud </h1>
+    <div class="d-flex justify-content-between align-items-center" id="cards-request">
+        <div class="card text-dark bg-light mb-3" onclick="redirectToLink('/delivery_custom')">
+            <div class="card-header text-center">PERSONALIZADA</div>
+            <div class="card-body">
+                <h5 class="card-title">Formulario :</h5>
+                <p class="card-text">Generar una solicitud más específica a completar. Ej: Ir a la papeleria, reclamar
+                    algo, etc.</p>
+            </div>
+        </div>
+        <div class="card text-white bg-secondary mb-3" onclick="redirectToLink('/business')">
+            <div class="card-header text-center">NEGOCIOS</div>
+            <div class="card-body">
+                <h5 class="card-title">Redirigir a negocios:</h5>
+                <p class="card-text">Solicitudes dentro de los negocios dentro de la universidad. Ej: Pedir menu del día
+                    en Hood</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function redirectToLink(url) {
+        window.location.href = url;
+    }
+</script>
+{% endblock %}

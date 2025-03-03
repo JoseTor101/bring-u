@@ -1,154 +1,87 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block head%}
+<link rel="stylesheet" href="{% static '/css/chat/conversation.css' %}">
+{% endblock head %}
+
 {% block content %}
-
-
-<style>
-    body {
-        margin: 0;
-        /* Remove margin to avoid unexpected scrolling behavior */
-        padding: 0;
-        /* Remove padding to avoid unexpected scrolling behavior */
-    }
-
-    .chat-container {
-        height: auto;
-        /* Adjust the maximum height as needed */
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        /* Align messages to the bottom (right-aligned sent messages) */
-    }
-
-    .messages {
-        border-radius: 10px;
-        padding: 10px;
-        margin: 10px;
-        max-width: 70%;
-        /* Adjust as needed */
-    }
-
-    .messages-sent {
-        background-color: #cfe2ff;
-        /* Example background color for sent messages */
-        align-self: flex-end;
-    }
-
-    .messages-received {
-        background-color: #f0f0f0;
-        /* Example background color for received messages */
-        align-self: flex-start;
-    }
-
-    .message-sender {
-        font-weight: bold;
-    }
-
-    .message-input-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px;
-        background-color: #f0f0f0;
-        /* Background color for the input container */
-    }
-
-    .message-input {
-        flex-grow: 1;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 5px;
-        margin-right: 10px;
-    }
-
-    .send-button {
-        background-color: #007bff;
-        /* Example background color for the send button */
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-    }
-</style>
-
-<body>
-    <div id="container">
-        <div class="chat-container" id="chat-container">
-            {% for message in messages %}
-            <div class="messages {% if message.sender == user %}messages-sent{% else %}messages-received{% endif %}"
-                data-sender="{{ message.sender }}">
-                <span class="message-sender">{{ message.sender }}</span>
-                <p>{{ message.content }}</p>
-                <p>{{ message.timestamp }}</p>
-            </div>
-            {% endfor %}
+<div id="main-container">
+    <div class="messages-container" id="messages-container">
+        {% for message in messages %}
+        <div class="messages {% if message.sender == user %}messages-sent{% else %}messages-received{% endif %}"
+            data-sender="{{ message.sender }}">
+            <span class="message-sender">{{ message.sender }}</span>
+            <p class="message-content">{{ message.content }}</p>
+            <p class="message-timestamp">{{ message.timestamp }}</p>
         </div>
-        <form id="chat-form">
-            <div class="form-group">
-                <input class="form-control" placeholder="Enter text here" id="input" type="text"></br>
-            </div>
-            <input class="btn btn-primary btn-lg btn-block" id="submit" type="button" value="Send">
-        </form>
+        {% endfor %}
     </div>
+    <form id="chat-form" class="chat-form">
+        <div class="form-group">
+            <input class="form-control" placeholder="Enter text here" id="input" type="text">
+        </div>
+        <input class="btn btn-primary btn-lg btn-block" id="submit" type="button" value="Send">
+    </form>
+</div>
 
 
-    <script>
-        const username = '{{ user }}';
-        const chatContainer = document.querySelector('#chat-container');
-        const chatForm = document.querySelector('#chat-form'); 
-        
-        chatForm.addEventListener('submit', function (e) {
-            e.preventDefault(); // Prevent the default form submission action
+<script>
+    const username = '{{ user }}';
+    const chatContainer = document.querySelector('#messages-container');
+    const chatForm = document.querySelector('#chat-form');
 
-            const messageInputDom = document.querySelector('#input');
-            const message = messageInputDom.value;
+    chatForm.addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent the default form submission action
 
-            chatSocket.send(JSON.stringify({
-                'message': message,
-                'username': username,
-            }));
-            messageInputDom.value = '';
-        });
+        const messageInputDom = document.querySelector('#input');
+        const message = messageInputDom.value;
 
-        document.querySelector('#submit').onclick = function (e) {
-            const messageInputDom = document.querySelector('#input');
-            const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'username': username,
+        }));
+        messageInputDom.value = '';
+    });
 
-            chatSocket.send(JSON.stringify({
-                'message': message,
-                'username': username,
-            }));
-            messageInputDom.value = '';
-        };
+    document.querySelector('#submit').onclick = function (e) {
+        const messageInputDom = document.querySelector('#input');
+        const message = messageInputDom.value;
 
-        const chatSocket = new WebSocket(
-            "ws://" + window.location.host + "/ws/chat/{{ chat.id_chat }}"
-        );
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'username': username,
+        }));
+        messageInputDom.value = '';
+    };
 
-        chatSocket.onmessage = function (e) {
-            const data = JSON.parse(e.data);
+    const chatSocket = new WebSocket(
+        "ws://" + window.location.host + "/ws/chat/{{ chat.id_chat }}/"
+    );
 
-            //FECHA TEMPORAL
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const now = new Date();
-            const tempTimeStamp = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}, ${now.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}`;
-            // -------
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
 
-            const messageClass = data.username === username ? 'messages-sent' : 'messages-received';
-            const messageElement = document.createElement('div');
-            messageElement.className = `messages ${messageClass}`;
-            messageElement.innerHTML = `
+        //FECHA TEMPORAL
+        const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        const now = new Date();
+        const options = { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'America/Bogota' };
+        const tempTimeStamp = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}, ${now.toLocaleString('es-CO', options)}`;
+        // -------
+
+        const messageClass = data.username === username ? 'messages-sent' : 'messages-received';
+        const messageElement = document.createElement('div');
+        messageElement.className = `messages ${messageClass}`;
+        messageElement.innerHTML = `
                 <span class="message-sender">${data.username}</span>
-                <p>${data.message}</p>
-                <p>${tempTimeStamp}</p>
+                <p class="message-content">${data.message}</p>
+                <p class="message-timestamp">${tempTimeStamp}</p>
             `;
-            console.log(data);
-            chatContainer.appendChild(messageElement);
-        };
+        console.log(data);
+        chatContainer.appendChild(messageElement);
+    };
 
 
-    </script>
-</body>
+</script>
 
-</html>
 {% endblock content %}

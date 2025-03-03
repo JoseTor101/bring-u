@@ -26,7 +26,7 @@ def home(request):
     return render(request, 'home.html', context)
 
 @login_required
-def business(request):
+def business(request):  
     try: 
         user = request.user
         is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
@@ -38,13 +38,12 @@ def business(request):
             businesses =  Business.objects.all()
             searchBusiness = "" 
 
-        
         businessesDict = {
             'businesses': businesses,
             'searchRestaurant':searchBusiness,
             'is_delivering':is_delivering
         } 
-
+       
         #CREACION DE ORDEN
         if request.method == "POST":
             form_data = request.POST
@@ -66,8 +65,9 @@ def business(request):
 
             return redirect('/profile')
 
-        return render(request, 'business.html', businessesDict  )
-    except:
+        return render(request, 'business.html', businessesDict )
+    except Exception as e:
+        print(f"Error: {e}")
         return redirect('/not_found')
 
 @login_required
@@ -168,7 +168,7 @@ def profile(request):
             return redirect("/profile")
     
     
-    return render(request, 'profile.html', context)
+    return render(request, 'profile/profile_dashboard.html', context)
 
 @login_required
 #SELECCIONAR SI QUIERES UNA PETICION PERSONALIZADA O DE RESTAURANTES
@@ -178,11 +178,11 @@ def orders(request):
     context = {
         'is_delivering':is_delivering
     }
-    return render(request, 'request.html', context)
+    return render(request, 'delivery_type.html', context)
 
-#CREAR SOLICITUD PERSONALIZADA EN "my_request.html"
+#CREAR SOLICITUD PERSONALIZADA EN "delivery_type.html"
 @login_required
-def my_request(request):
+def delivery_custom(request):
     user = request.user
     is_delivering = UserProfile.objects.filter(username=user, is_service_prov=True).exists() if user.is_authenticated else False
 
@@ -210,7 +210,7 @@ def my_request(request):
 
 
 
-    return render(request, 'my_request.html', context)
+    return render(request, 'delivery_custom.html', context)
 
 #VER ÓRDENES QUE SE PUEDEN TOMAR EN "available_orders.html"
 @login_required

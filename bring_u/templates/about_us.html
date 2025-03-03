@@ -1,49 +1,26 @@
-<body>
-    {% extends "base.html" %}
-    {% block content %}
-    <style>
-        .foto{
-            width: auto;
-            height: 200px;
-            border-radius: 50%;
-            margin-left: auto;
-            margin-right: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 5px solid #F59422;
-        }
+{% extends "base.html" %}
+{% load static %}
 
-        .texto, .texto1{
-            text-align: left;
-            padding-top: 10px;
-            padding-left: 25px;
-        }
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/main/aboutus.css' %}">
+{% endblock %}
+{% block content %}
 
-        .texto1{
-            padding-top: 50px;
-        }
-
-        .col-sm-6{
-            background-color: #F0592C ;
-        }
-    </style>
-    <div class="row g-0 text-center">
-        <div class="col-sm-6 col-md-4">.
-            <img class="foto" src="/../media/jose.jpg" alt="">
-            <br>
-            <img class="foto" src="/../media/cris.jpg" alt="">
-            <br>
-            <img class="foto" src="/../media/manu.jpg" alt="">
-        </div>
-        <div class="col-6 col-md-8">
-            <h1 class="texto1">Mission: </h1>
-            <p class="texto"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem inventore repellendus voluptates amet. Facilis recusandae voluptate saepe possimus sit consequuntur. Iure velit sequi id obcaecati, soluta dolor illo reiciendis inventore.</p>
-            <h1 class="texto">Vision: </h1>
-            <p class="texto"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, nam distinctio, error perferendis eum ullam delectus itaque quibusdam vel aliquid ut reprehenderit tenetur minima adipisci vitae cupiditate. Hic, magni mollitia.</p>
-            <h1 class="texto">Our Politics</h1>
-            <p class="texto">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit architecto minima quod cupiditate, rem temporibus reprehenderit quam sunt tempore eius. Perferendis doloremque reiciendis deserunt sed nam eius nemo placeat ea.</p>
-        </div>
+<div class="row g-0 text-center">
+    <div class="col-sm-6 col-md-4">
+        <img class="foto" src="/../media/jose.jpg" alt="">
+        <br>
+        <img class="foto" src="/../media/cris.jpg" alt="">
+        <br>
+        <img class="foto" src="/../media/manu.jpg" alt="">
     </div>
-    {% endblock %}
-</body>
+    <div class="col-6 col-md-8 pr-5">
+        <h1 class="texto1">Misión: </h1>
+        <p class="texto">Entendemos los desafíos que enfrentan los estudiantes universitarios, equilibrando horarios académicos exigentes mientras también gestionan necesidades diarias como la comida y el transporte. "Bring-U" está impulsado por el deseo de simplificar y enriquecer la vida de los estudiantes, haciendo su tiempo en el campus más cómodo y agradable. Al ofrecer una plataforma conveniente para solicitar entregas de comida de restaurantes locales y servicios de carpooling, buscamos crear un ecosistema de apoyo que fomente un fuerte sentido de pertenencia y colaboración.</p>
+        <h1 class="texto">Visión: </h1>
+        <p class="texto">Queremos mejorar la eficiencia de la movilidad, reducir los tiempos de espera al ordenar y empoderar los ingresos de los estudiantes.</p>
+        <h1 class="texto">Nuestras Políticas</h1>
+        <p class="texto">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit architecto minima quod cupiditate, rem temporibus reprehenderit quam sunt tempore eius. Perferendis doloremque reiciendis deserunt sed nam eius nemo placeat ea.</p>
+    </div>
+</div>
+{% endblock %}

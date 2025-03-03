@@ -1,0 +1,25 @@
+.foto{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 5px solid #F59422;
+}
+
+.texto, .texto1{
+    text-align: left;
+    padding-top: 10px;
+    padding-left: 25px;
+}
+
+.texto1{
+    padding-top: 50px;
+}
+
+.col-sm-6{
+    background-color: #F0592C ;
+}

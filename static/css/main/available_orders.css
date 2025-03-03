@@ -1,0 +1,8 @@
+
+main {
+    background-color: #FFA500;
+    background-image: linear-gradient(to bottom right, #FF7F50, #FF4500);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
